@@ -1,0 +1,36 @@
+@import '../variables'
+
+.roomcard--container
+    padding: 10px 15px
+    border-radius: 15px
+    cursor: pointer
+    transition: .2s
+    .room
+        &--avatar
+            color: #FF6666
+            font-weight: 700
+            margin-right: 20px
+            @include circle(40px, white)
+        &--desc
+            @include respond-md
+                display: none
+            p, span
+                margin: 0
+                padding: 2px
+            p
+                @include ellipsis
+            .name
+                font-size: 15px
+            .status
+                font-size: 12px
+            &::after 
+                content: ''
+                display: inline-block
+                margin: 0 10px
+                @include circle(8px, $lightGreen)
+        &--notifications
+            @include circle(20px, $red)
+            font-size: 13px
+
+.active
+    background-color: #171C43

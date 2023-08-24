@@ -1,0 +1,50 @@
+$main: #22274D
+$blue: #0797FF
+$pink: #FF759E
+$red: #F95252
+$lightGreen: #89FF8E
+$whiteText: #DCDEED
+$secondary: #334967
+
+$screen-sm: 600px
+$screen-md: 960px
+$screen-lg: 1280px
+$screen-xl: 1920px
+
+@mixin respond-lg
+    @media (max-width: $screen-lg)
+        @content
+
+@mixin respond-md
+    @media (max-width: $screen-md)
+        @content
+
+@mixin respond-sm
+    @media (max-width: $screen-sm)
+        @content
+
+@mixin text-md
+    font-size: 16px
+    line-height: 25px
+    color: $whiteText
+
+@mixin text-sm
+    font-size: 14px
+    line-height: 20px
+    color: $whiteText
+
+@mixin circle($width, $color)
+    width: $width
+    height: $width
+    border-radius: $width
+    line-height: $width
+    text-align: center
+    background-color: $color
+
+@mixin ellipsis
+    overflow: hidden
+    text-overflow: ellipsis
+    white-space: initial
+    display: -webkit-box
+    -webkit-line-clamp: 1
+    -webkit-box-orient: vertical

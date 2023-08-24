@@ -1,0 +1,34 @@
+@import './variables'
+
+.container
+    height: 100vh
+    padding: 10%
+    box-sizing: border-box
+
+.block
+    width: calc(50vw)
+    padding: 10%
+    color: $whiteText
+    box-sizing: border-box
+    @include respond-lg
+        width: calc(100vw - 10px)
+    .header__title
+        font-size: 30px
+        line-height: 70px
+
+        h1
+            margin-bottom: 0
+        .title--pink
+            color: $pink
+        .title--blue
+            color: $blue
+    .header__desc
+        @include text-md
+        padding: 15px 0 20px 0
+    .button__signup
+        width: 250px
+        @include text-md
+
+.block__images
+    @include respond-sm
+        display: none

@@ -1,0 +1,28 @@
+
+@import './variables'
+
+.button
+    text-decoration: none
+    border: none
+    border-radius: 10px
+    height: 45px
+    padding: 5px 20px
+    margin: 5px 0
+    color: white
+    background-color: $blue
+    transition: .2s
+    font-weight: 500
+    white-space: nowrap
+    display: flex
+    justify-content: center
+    align-items: center
+    @include text-sm
+    @include respond-md
+        padding: 10px
+
+    &:hover
+        filter: brightness(.8)
+        cursor: pointer
+
+.buttonSecondary
+    background-color: $secondary

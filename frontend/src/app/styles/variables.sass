@@ -2,8 +2,12 @@ $main: #22274D
 $blue: #0797FF
 $pink: #FF759E
 $red: #F95252
+$gray: #B1C9DD
 $lightGreen: #89FF8E
+
 $whiteText: #DCDEED
+$inputBg: #E6EAEE
+
 $secondary: #334967
 
 $screen-sm: 600px
@@ -31,7 +35,6 @@ $screen-xl: 1920px
 @mixin text-sm
     font-size: 14px
     line-height: 20px
-    color: $whiteText
 
 @mixin circle($width, $color)
     width: $width
@@ -48,3 +51,9 @@ $screen-xl: 1920px
     display: -webkit-box
     -webkit-line-clamp: 1
     -webkit-box-orient: vertical
+
+
+@mixin hoverEffect
+    &:hover
+        filter: brightness(.8)
+        cursor: pointer

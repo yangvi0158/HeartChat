@@ -1,11 +1,22 @@
+import { useState } from 'react';
 import Stack from '@mui/material/Stack';
+import { signOut } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 
+import CreateRoomDialog from '../Dialog/CreateRoomDialog';
 import RoomCard from '../Room/RoomCard';
 import '../../styles/room/roomSideBar.sass'
 import styles from '../../styles/index.module.sass';
 import roomStyles from '../../styles/room/room.module.sass';
 
 export default function RoomSideBar() {
+    const [openDialog, setOpenDialog] = useState(false);
+
+    const handleClickOpen = () => setOpenDialog(true);
+    const handleClickCLose = () => setOpenDialog(false);
+
+    const { data: session, status } = useSession();
+    
     return (
         <div className={`${roomStyles.roomSection} roomSideBar`}>
             <Stack 
@@ -29,8 +40,17 @@ export default function RoomSideBar() {
                 <RoomCard />
             </div>
             <Stack className="actions--block">
-                <button className={`${styles.button}`}>Create Room</button>
-                <button className={`${styles.button} ${styles.buttonSecondary}`}>Sign out</button>
+                <button
+                    className={`${styles.button}`}
+                    onClick={handleClickOpen}
+                >Create Room</button>
+                <button
+                    className={`${styles.button} ${styles.buttonSecondary}`}
+                    onClick={() => signOut({ callbackUrl: '/' })}
+                >
+                    Sign out
+                </button>
+                <CreateRoomDialog open={openDialog} closeCallback={handleClickCLose}/>
             </Stack>
         </div>
     )

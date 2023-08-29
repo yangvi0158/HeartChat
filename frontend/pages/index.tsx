@@ -1,6 +1,10 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import Stack from '@mui/material/Stack';
+import CircularProgress from '@mui/material/CircularProgress';
 import { motion, Variants } from "framer-motion";
+import { signIn } from 'next-auth/react'; 
+import { useSession } from 'next-auth/react';
 
 import { transition } from '@/app/animations/config';
 import '@/app/styles/index.sass';
@@ -43,6 +47,23 @@ const image: Variants = {
 
 
 export default function HomePage() {
+    const { data: session, status } = useSession();
+    let buttonContent;
+    if (status === 'loading') {
+        buttonContent = (
+            <CircularProgress color="secondary" size="20px"/>
+        );
+    } else if (status === 'authenticated') {
+        buttonContent = (
+            <Link href="/room/1">Start HeartChat!</Link>
+        )
+    } else {
+        buttonContent = (
+            <span>Sign In</span>
+        )
+    }
+
+
     return (
         <Stack direction="row" justifyContent="center" alignItems='center' className="container">
             <Stack className="block">
@@ -60,7 +81,11 @@ export default function HomePage() {
                     HeartChat makes it easy and fun to quickly chat with people all around the globe.
                 </p>
                 <div>
-                    <button className={`${styles.button} button__signup`}>Sign In</button>
+                    <button className={`${styles.button} button__signup`} onClick={() => {
+                        if (status === 'unauthenticated') signIn(undefined, { callbackUrl: '/room/1' });
+                    }}>
+                        {buttonContent}
+                    </button>
                 </div>
             </Stack>
             <MotionStack
@@ -114,3 +139,4 @@ export default function HomePage() {
         </Stack>
     )
 }
+

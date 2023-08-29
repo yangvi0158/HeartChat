@@ -4,10 +4,13 @@ import './variables.sass'
 const theme = createTheme({
     palette: {
         primary: {
-            main: '#000000',
+            main: '#0797FF',
         },
         secondary: {
-            main: '#000000',
+            main: '#B1C9DD',
+        },
+        info: {
+            main: '#FFFFFF',
         },
     },
 })

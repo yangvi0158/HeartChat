@@ -5,10 +5,10 @@
     @include respond-lg
         flex: 2
     @include respond-md
-        max-width: 120px
+        max-width: 90px
     .selfInfo--block
         color: white
-        margin-bottom: 50px
+        margin-bottom: 30px
         p
             margin: 0
             @include respond-md
@@ -22,8 +22,15 @@
             margin-right: 15px
 
     .rooms--block
+        overflow: hidden
+        height: calc(100% - 170px)
         color: $whiteText
         .title
-            margin: 30px 0
+            margin-bottom: 30px
             font-size: 20px
             font-weight: 500
+            
+    .actions--block
+        button
+            @include respond-md
+                font-size: 12px

@@ -1,7 +1,6 @@
 import Stack from '@mui/material/Stack';
 
-import '../../styles/room/roomCard.sass'
-import styles from '../../styles/room/room.module.sass';
+import '../../styles/room/roomCard.sass';
 
 export default function RoomCard({active}: any) {
     return (

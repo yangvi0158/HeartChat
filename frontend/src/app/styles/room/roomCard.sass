@@ -2,7 +2,7 @@
 
 .roomcard--container
     padding: 10px 15px
-    border-radius: 15px
+    //border-radius: 15px
     cursor: pointer
     transition: .2s
     .room
@@ -21,6 +21,7 @@
                 @include ellipsis
             .name
                 font-size: 15px
+                white-space: nowrap
             .status
                 font-size: 12px
             &::after 
@@ -31,6 +32,9 @@
         &--notifications
             @include circle(20px, $red)
             font-size: 13px
+            @include respond-md
+                display: none
 
 .active
     background-color: #171C43
+    border-right: solid 4px $blue

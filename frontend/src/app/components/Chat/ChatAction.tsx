@@ -31,10 +31,10 @@ export default function ChatAction() {
                 alignItems="center"
             >
                 <SendRoundedIcon
-                    color="info"
                     fontSize="small"
                     sx={{
-                        transform: "rotate(-40deg) translate(3px)"
+                        transform: "rotate(-40deg) translate(3px)",
+                        color: '#FFFFFF'
                     }}
                 />
             </Stack>

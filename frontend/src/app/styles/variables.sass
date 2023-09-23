@@ -52,8 +52,15 @@ $screen-xl: 1920px
     -webkit-line-clamp: 1
     -webkit-box-orient: vertical
 
-
 @mixin hoverEffect
     &:hover
         filter: brightness(.8)
         cursor: pointer
+
+@mixin scrollbar-vertical
+    overflow-y: scroll
+    scrollbar-width: none
+    -ms-overflow-style: none
+    &::-webkit-scrollbar
+        width: 0
+        height: 0

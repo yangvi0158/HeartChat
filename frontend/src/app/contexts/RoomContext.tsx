@@ -12,7 +12,7 @@ import { useSocket } from './SocketContext';
 
 const initialData = {
     rooms: [],
-    currentRoom: '',
+    currentRoom: [],
     setRooms: (list:[]) => {},
     setCurrentRoom: (id:string) => {}
 }
@@ -31,15 +31,15 @@ export default function RoomProvider({
     const { query, push } = useRouter();
     const { roomId } = query;
     const [rooms, setRooms] = useState([]);
-    const [currentRoom, setCurrentRoom] = useState<string>('');
+    const [currentRoom, setCurrentRoom] = useState<any>([]);
 
     useEffect(() => {
         if (socket && roomId) {
-            let room = rooms.find((item) => item === roomId)
+            const room = rooms.find((item) => item[0].room_id === roomId);
             if (room) {
                 setCurrentRoom(room);
             } else if (rooms.length) {
-                push(`/room/${rooms[0]}`);
+                push(`/room/${rooms[0][0].room_id}`);
             }
         }
     }, [roomId, rooms]);

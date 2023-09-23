@@ -11,9 +11,10 @@ import {
 import { socket } from '../socket';
 
 const initialData = {
-    socket: null,
+    socket: socket,
     //roomUsers: {},
-    messages: {}
+    messages: {},
+    socketId: ''
 }
 const SocketContext = createContext(initialData);
 
@@ -56,9 +57,8 @@ export default function SocketProvider({
         socket.on('receive_message', onReceiveMsg);
 
         return () => {
-            //disconnect
+            //TODO DISCONNECT
             socket.off('receive_message', onReceiveMsg);
-            
         }
     }, [messages]);
 

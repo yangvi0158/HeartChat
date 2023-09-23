@@ -4,6 +4,7 @@ import { AnimatePresence } from "framer-motion";
 import { ThemeProvider } from '@mui/material/styles'
 import { SessionProvider } from 'next-auth/react'
 
+import { UserProvider } from '@/app/contexts/UserContext';
 import { SocketProvider } from '@/app/contexts/SocketContext';
 import { RoomProvider } from '@/app/contexts/RoomContext';
 import { SnackBarProvider } from '@/app/hooks/useSnackBar';
@@ -24,15 +25,17 @@ export default function App({
       <SessionProvider session={session}>
         <SocketProvider>
           <RoomProvider>
-            <main className={inter.className}>
-              <ThemeProvider theme={theme}>
-                  <AnimatePresence mode="wait">
-                    <SnackBarProvider>
-                      <Component {...pageProps}/>
-                    </SnackBarProvider>
-                  </AnimatePresence>
-              </ThemeProvider>
-            </main>
+            <UserProvider>
+              <main className={inter.className}>
+                <ThemeProvider theme={theme}>
+                    <AnimatePresence mode="wait">
+                      <SnackBarProvider>
+                        <Component {...pageProps}/>
+                      </SnackBarProvider>
+                    </AnimatePresence>
+                </ThemeProvider>
+              </main>
+            </UserProvider>
           </RoomProvider>
         </SocketProvider>
       </SessionProvider>

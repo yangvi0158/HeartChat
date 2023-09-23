@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import Stack from '@mui/material/Stack';
-import { useSession } from 'next-auth/react';
 
+import { useUser } from '@/app/contexts/UserContext';
 import { useRoom } from '@/app/contexts/RoomContext';
 import { useSocket } from '@/app/contexts/SocketContext';
 import RoomSideBar from '@/app/components/Room/RoomSideBar';
@@ -9,13 +9,12 @@ import RoomMain from '@/app/components/Room/RoomMain';
 import '@/app/styles/room.sass';
 
 export default function Room () {
-    const {socket, socketId, messages} = useSocket();
-    const {rooms, setRooms, currentRoom, setCurrentRoom} = useRoom();
-    // const { data: session, status } = useSession();
+    const { socket } = useSocket();
+    const { setRooms } = useRoom();
+    const { userData } = useUser();
 
     const initWebSocket = () => {
         socket.on('getRooms', (rooms: any) => {
-            console.log('getRoom')
             setRooms(rooms);
         })
 
@@ -26,16 +25,17 @@ export default function Room () {
         })
     }
 
-    const disconnectWebSocket = () => {
-        socket.emit('disConnection', 'XXX')
-    }
+    // const disconnectWebSocket = () => {
+    //     socket.emit('disConnection', 'XXX')
+    // }
 
     useEffect(() => {
-        if (socket) {
-            initWebSocket();
-            socket.emit('addRoom', 'Global-Room');
-        }
-    },[socket]);
+        if (socket) initWebSocket();
+    },[socket, userData]);
+
+    useEffect(() => {
+        if (socket) socket.emit('getRooms', userData.id);
+    }, [socket, userData?.id])
 
     return (
         <Stack
@@ -44,9 +44,8 @@ export default function Room () {
             alignItems='center'
             className="roomContainer"
         >
-            <RoomSideBar rooms={rooms} currentRoom={currentRoom}/>
-            <RoomMain rooms={rooms} currentRoom={currentRoom}/>
-            {/* <button onClick={disconnectWebSocket}>段線</button> */}
+            <RoomSideBar/>
+            <RoomMain/>
         </Stack>
     )
 };

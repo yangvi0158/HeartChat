@@ -15,9 +15,18 @@ export const options: NextAuthOptions = {
         }),
         GitHubProvider({
             clientId: process.env.GITHUB_ID as string,
-            clientSecret: process.env.GITHUB_SECRET as string
-        })
-    ]
+            clientSecret: process.env.GITHUB_SECRET as string,
+        }),
+    ],
+    callbacks: {
+        session: ({ session, token }) => ({
+            ...session,
+            user: {
+                ...session.user,
+                id: token.sub,
+            },
+        }),
+    },
 }
 
 // Call request via /api/auth/providers

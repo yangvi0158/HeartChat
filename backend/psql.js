@@ -11,17 +11,30 @@ async function getRooms(userId) {
         SELECT room_list FROM Users
         WHERE ${userId} = id;
     `
-    let result = [];
 
-    for(let id of roomList[0].room_list) {
-        let item = await sql`
-            SELECT * FROM Rooms
-            WHERE room_id = ${id}
-        `
-        result.push(item)
+    if (roomList[0]?.room_list.length) {
+        let result = [];
+        for(let id of roomList[0].room_list) {
+            let item = await sql`
+                SELECT * FROM Rooms
+                WHERE room_id = ${id}
+            `
+            result.push(item)
+        }
+    
+        return result;   
     }
+}
 
-    return result;
+async function leaveRoom({userId, roomId}) {
+    await sql`
+        UPDATE Users
+    SET room_list =  array_remove(
+            room_list,
+            ${roomId}
+        )
+        WHERE id = ${userId};
+    `
 }
 
 async function addRoom(userId, roomName) {
@@ -53,13 +66,33 @@ async function addRoom(userId, roomName) {
 
 }
 
-async function joinRoom(userId, roomId) {
-    await sql`
-        UPDATE Users
-        SET temp_hi = temp_hi - 2,  temp_lo = temp_lo - 2
-        WHERE date > '1994-11-28';
+async function joinRoom({userId, roomId}) {
+    let room = await sql`
+        SELECT room_name FROM ROOMS
+        WHERE room_id = ${roomId}
     `
+    if (!room.length) {
+        throw new Error('Cannot find this room!');
+    } else {
+        let roomList = await sql`
+            SELECT room_list FROM Users
+            WHERE ${userId} = id;
+        `
+        let alreadyHasRoom = roomList[0].room_list.some((item) => item === roomId);
+        if (alreadyHasRoom) throw new Error('You already in this room.')
+
+        const result = await sql`
+        UPDATE Users
+        SET room_list = array_append(
+            room_list,
+            ${roomId}
+        )
+        WHERE id = ${userId};
+        `   
+        return {result, room}
+    }
 }
+
 
 async function getCurrentUser(userId) {
     const result = await sql`
@@ -91,4 +124,11 @@ async function insertUser({
     return user
 };
 
-module.exports = { insertUser, getCurrentUser, addRoom, getRooms };
+module.exports = {
+    insertUser,
+    getCurrentUser,
+    addRoom,
+    joinRoom,
+    getRooms,
+    leaveRoom
+};

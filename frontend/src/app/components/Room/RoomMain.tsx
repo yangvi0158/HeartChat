@@ -27,7 +27,8 @@ export default function RoomMain() {
     // TODO 
     const handleLeaveRoom = () => {
         socket.emit('leaveRoom', {
-            currentRoom: currentRoom,
+            roomId: currentRoom[0].room_id,
+            userId: userData.id,
             userName: userData.name
         });
     }

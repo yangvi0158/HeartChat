@@ -42,7 +42,7 @@ export default function RoomSideBar() {
             </Stack>
             <div className="rooms--block">
                 <p className="title">My Rooms</p>
-                {rooms.map((room, key) => {
+                {rooms && rooms.map((room, key) => {
                     const roomId = room[0]?.room_id;
                     const currentRoomId = currentRoom[0]?.room_id;
                     return (

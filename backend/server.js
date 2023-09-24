@@ -70,6 +70,29 @@ io.on('connection', async(socket) => {
         // // console.log('sids', sids)
     })
 
+    socket.on('joinRoom', async (data) => {
+        try {
+            let result = await psql.joinRoom(data);
+            const { roomId, userName, userId } = data;
+            if (result) {
+                io.emit('receive_message', {
+                    text: `${userName} enters the room, Welcome 👏`,
+                    name: userName,
+                    id: '',
+                    time: new Date(),
+                    socketId: 'wsSystem',
+                    roomId: roomId
+                })
+                let roomList = await psql.getRooms(userId);
+                socket.emit('getRooms', roomList);
+                socket.emit('addRoom', roomId);
+            }
+        } catch (error) {
+            console.log('error', error);
+            //TODO show error message
+        }
+    })
+
     socket.on('addRoom', async ({room, userName, userId}) => {
         try {
             let roomId = await psql.addRoom(userId, room);
@@ -79,14 +102,17 @@ io.on('connection', async(socket) => {
                 //let socketId = socket.id;
 
                 //everyone received
+                //TODO
                 io.sockets.in(room).emit('receive_message', {
-                    text: `${userName} enter the room`,
+                    text: `${userName} enters the room, Welcome 👏`,
                     name: userName,
                     id: '',
                     time: new Date(),
                     socketId: 'wsSystem',
                     roomId: room
                 })
+                socket.emit('getRooms', roomList);
+                socket.emit('addRoom', roomId);
                 
                 // const sids = io.of("/").adapter.sids;
                 // let array = [];
@@ -94,8 +120,7 @@ io.on('connection', async(socket) => {
                 // sids.get(socketId).forEach(item => {
                 //     if (item !== socketId) array.push(item)
                 // })
-                // console.log('array', array)
-                socket.emit('getRooms', roomList)
+                
             }
         } catch (error) {
             console.error(error);
@@ -126,28 +151,46 @@ io.on('connection', async(socket) => {
         // socket.emit('getRooms', array)
     })
 
-    socket.on('leaveRoom', ({currentRoom, userName}) => {
-        socket.leave(currentRoom);
+    socket.on('leaveRoom', async(data) => {
+        try {
+            await psql.leaveRoom(data);
+            const { userName, userId, roomId } = data;
+            socket.broadcast.emit('receive_message', {
+                text: `${userName} leave the room`,
+                name: userName,
+                id: '',
+                time: new Date(),
+                socketId: 'wsSystem',
+                roomId: roomId
+            })
 
-        let userId = socket.id;
-        io.sockets.in(currentRoom).emit('receive_message', {
-            text: `${userName} leave the room`,
-            name: userName,
-            id: '',
-            time: new Date(),
-            socketId: 'wsSystem',
-            roomId: currentRoom
-        })
+            let roomList = await psql.getRooms(userId);
+            socket.emit('getRooms', roomList);
+        } catch (error) {
+            console.error(error)
+        }
+        //socket.leave(currentRoom);
+
+        // let userId = socket.id;
         // socket.to(room).emit('leaveRoom', '有人離開（room 內除了當事人以外都收到）')
         // io.sockets.in(room).emit('leaveRoom', '有人離開（room 內所有人都收到）')
 
-        const sids = io.of("/").adapter.sids;
-        let array = [];
-        sids.get(userId).forEach(item => {
-            if (item !== userId) array.push(item)
-        })
+        // io.sockets.in(currentRoom).emit('receive_message', {
+        //     text: `${userName} leave the room`,
+        //     name: userName,
+        //     id: '',
+        //     time: new Date(),
+        //     socketId: 'wsSystem',
+        //     roomId: currentRoom
+        // })
 
-        socket.emit('getRooms', array)
+        // const sids = io.of("/").adapter.sids;
+        // let array = [];
+        // sids.get(userId).forEach(item => {
+        //     if (item !== userId) array.push(item)
+        // })
+
+        // socket.emit('getRooms', array)
     })
 
     socket.on('disConnection', message => {

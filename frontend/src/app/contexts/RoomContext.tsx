@@ -35,10 +35,10 @@ export default function RoomProvider({
 
     useEffect(() => {
         if (socket && roomId) {
-            const room = rooms.find((item) => item[0].room_id === roomId);
+            const room = rooms?.find((item) => item[0].room_id === roomId);
             if (room) {
                 setCurrentRoom(room);
-            } else if (rooms.length) {
+            } else if (rooms?.length) {
                 push(`/room/${rooms[0][0].room_id}`);
             }
         }

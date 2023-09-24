@@ -7,6 +7,7 @@ import {
     useState,
     ReactNode
 } from 'react';
+import { useRouter } from 'next/router';
 
 import { socket } from '../socket';
 
@@ -27,6 +28,7 @@ export default function SocketProvider({
 }: {
     children: ReactNode
 }) {
+    const { push } = useRouter();
     const [socketId, setSocketId] = useState('');
     const [roomUsers, setRoomUsers] = useState({});
     const [messages, setMessages] = useState({});
@@ -49,12 +51,18 @@ export default function SocketProvider({
                 return newMessages;
             })
         }
+
+        function onAddRoom(roomId: string) {
+            push(`/room/${roomId}`)
+        }
+
         function onConnect() {
             setSocketId(socket.id);
         }
 
         socket.on('connect', onConnect);
         socket.on('receive_message', onReceiveMsg);
+        socket.on('addRoom', onAddRoom);
 
         return () => {
             //TODO DISCONNECT

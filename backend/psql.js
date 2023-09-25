@@ -115,7 +115,6 @@ async function insertUser({
             ${ id },
             ${ name },
             ${ avatar_color },
-            //TODO: Fixed global room id
             ARRAY ['e8668385-4f5e-4da7-81f6-e5cb886ea0f2'],
             ${Date.now()}
         )

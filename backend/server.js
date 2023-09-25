@@ -22,7 +22,7 @@ io.on('connection', async(socket) => {
         if (!userId) return;
         try {
             let result = await psql.getCurrentUser(userId);
-            if (result) socket.emit('getCurrentUser', result);
+            socket.emit('getCurrentUser', result);
         } catch (error) {
             console.error(error);
         }

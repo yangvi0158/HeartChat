@@ -10,7 +10,7 @@ type Props = {
 }
 
 export default function RoomCard({active, room}: Props) {
-    const { room_name } = room[0];
+    const { room_name, online_user_amount } = room[0];
     const getAvatarColor = useCallback(() => {
         const max = colorList.length;
         const index = Math.floor(Math.random() * max);
@@ -40,7 +40,9 @@ export default function RoomCard({active, room}: Props) {
                 </div>
                 <div className="room--desc">
                     <p className="name">{room_name}</p>
-                    <span className="status">1 online</span>
+                    <span className={`status ${online_user_amount > 1 && `online`}`}>
+                        {online_user_amount} online
+                    </span>
                 </div>
             </Stack>
             <div className="room--notifications">2</div>

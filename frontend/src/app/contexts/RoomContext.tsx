@@ -14,7 +14,8 @@ const initialData = {
     rooms: [],
     currentRoom: [],
     setRooms: (list:[]) => {},
-    setCurrentRoom: (id:string) => {}
+    setCurrentRoom: (id:string) => {},
+    setIsInit: (isInit: boolean) => {}
 }
 
 const RoomContext = createContext(initialData);
@@ -32,6 +33,7 @@ export default function RoomProvider({
     const { roomId } = query;
     const [rooms, setRooms] = useState([]);
     const [currentRoom, setCurrentRoom] = useState<any>([]);
+    const [isInit, setIsInit] = useState(false);
 
     useEffect(() => {
         if (socket && roomId) {
@@ -44,12 +46,20 @@ export default function RoomProvider({
         }
     }, [roomId, rooms]);
 
+    useEffect(() => {
+        if (rooms.length && !isInit) {
+            socket.emit('enter', rooms);
+            setIsInit(true);
+        }
+    }, [isInit, rooms])
+
     return (
         <RoomContext.Provider value={{
             rooms,
             currentRoom,
             setCurrentRoom,
-            setRooms
+            setRooms,
+            setIsInit
         }}>
             {children}
         </RoomContext.Provider>

@@ -11,7 +11,7 @@ export const options: NextAuthOptions = {
         }),
         GoogleProvider({
             clientId: process.env.GOOGLE_ID as string,
-            clientSecret: process.env.Google_SECRET as string,
+            clientSecret: process.env.GOOGLE_SECRET as string,
         }),
         GitHubProvider({
             clientId: process.env.GITHUB_ID as string,

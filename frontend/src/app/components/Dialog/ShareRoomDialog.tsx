@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import Tooltip from '@mui/material/Tooltip';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
@@ -10,23 +9,25 @@ import IconButton from '@mui/material/IconButton';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 import { useSnackBar } from '../../hooks/useSnackBar'; 
+import { useRoom } from '@/app/contexts/RoomContext';
 
 type DialogProps = {
     open: boolean,
-    closeCallback: () => void
+    closeDialog: () => void
 }
 
 export default function DialogComponent({
-    open, closeCallback
+    open, closeDialog
 }: DialogProps) {
-    const [roomID, ] = useState('123455678sdffhhjkktre');
+    const { currentRoom } = useRoom();
+    const { room_id } = currentRoom[0] || '';
     const openSnackBar = useSnackBar();
 
     const handleClose = () => {
-        closeCallback();
+        closeDialog();
     }
     const handleCopy = () => {
-        navigator.clipboard.writeText(roomID);
+        navigator.clipboard.writeText(room_id);
         openSnackBar({
             text: 'Copied!',
             status: 'success'
@@ -45,7 +46,7 @@ export default function DialogComponent({
                     <Stack direction="row" alignItems="center">
                         <TextField
                             id="outlined-basic"
-                            value={roomID}
+                            value={room_id}
                             fullWidth
                             disabled
                         >

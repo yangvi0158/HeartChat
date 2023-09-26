@@ -6,12 +6,13 @@ import { motion, Variants } from "framer-motion";
 import { signIn } from 'next-auth/react'; 
 import { useSession } from 'next-auth/react';
 
+import { useUser } from '@/app/contexts/UserContext'; 
 import { transition } from '@/app/animations/config';
-import '@/app/styles/index.sass';
 import styles from '@/app/styles/index.module.sass';
 import window1 from '../public/home-window1.svg';
 import window2 from '../public/home-window2.svg';
 import window3 from '../public/home-window3.svg';
+import '@/app/styles/index.sass';
 
 const MotionImage = motion(Image);
 const MotionStack = motion(Stack);
@@ -48,15 +49,24 @@ const image: Variants = {
 
 export default function HomePage() {
     const { data: session, status } = useSession();
+    const { userData } = useUser();
+    console.log('session', session, 'useData', userData)
+
     let buttonContent;
     if (status === 'loading') {
         buttonContent = (
             <CircularProgress color="secondary" size="20px"/>
         );
     } else if (status === 'authenticated') {
-        buttonContent = (
-            <Link href="/room/1">Start HeartChat!</Link>
-        )
+        if (userData.id.length) {
+            buttonContent = (
+                <Link href="/room/init">Start HeartChat!</Link>
+            )
+        } else {
+            buttonContent = (
+                <Link href="/signup">Sign up</Link>
+            )
+        }
     } else {
         buttonContent = (
             <span>Sign In</span>
@@ -82,7 +92,7 @@ export default function HomePage() {
                 </p>
                 <div>
                     <button className={`${styles.button} button__signup`} onClick={() => {
-                        if (status === 'unauthenticated') signIn(undefined, { callbackUrl: '/room/1' });
+                        if (status === 'unauthenticated') signIn(undefined, { callbackUrl: '/room/init' });
                     }}>
                         {buttonContent}
                     </button>

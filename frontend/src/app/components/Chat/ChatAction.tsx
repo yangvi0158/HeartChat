@@ -16,6 +16,7 @@ export default function ChatAction() {
     const { currentRoom } = useRoom();
     const { userData } = useUser();
     const [input, setInput] = useState('');
+    const [sendable, setSendable] = useState(true);
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const emojiPickerRef = useRef<any>(null);
     const inputRef = useRef(null);
@@ -29,16 +30,23 @@ export default function ChatAction() {
         }
     }
 
+    const compositionStartHandler = () => { setSendable(false) };
+    const compositionEndHandler = () => { setSendable(true) };
+
     useEffect(() => {
         if (showEmojiPicker) document.addEventListener('click', clickOutside, true);
+        inputRef.current?.addEventListener('compositionstart', compositionStartHandler);
+        inputRef.current?.addEventListener('compositionend', compositionEndHandler);
 
         return () => {
             document.removeEventListener('click', clickOutside, true);
+            inputRef.current?.removeEventListener('compositionstart', compositionStartHandler);
+            inputRef.current?.removeEventListener('compositionend', compositionEndHandler);
         }
     }, [showEmojiPicker])
     
     const handleKeyDown = (event: KeyboardEvent<HTMLElement>) => {
-        if (event.key === 'Enter') sendMessage();
+        if (event.key === 'Enter' && sendable) sendMessage();
     }
 
     const handleClickEmoji = () => setShowEmojiPicker(true);
@@ -57,7 +65,7 @@ export default function ChatAction() {
 
     const sendMessage = () => {
         if (input.trim() && socket) {
-            socket.emit('send_message', {
+            socket.emit('sendMessage', {
                 text: input,
                 name: userData.name,
                 id: userData.id,

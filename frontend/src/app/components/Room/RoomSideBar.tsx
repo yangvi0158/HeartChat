@@ -5,6 +5,7 @@ import { signOut } from 'next-auth/react';
 
 import { useUser } from '@/app/contexts/UserContext';
 import { useRoom } from '@/app/contexts/RoomContext';
+import { useSocket } from '@/app/contexts/SocketContext';
 import CreateRoomDialog from '../Dialog/CreateRoomDialog';
 import RoomCard from '../Room/RoomCard';
 import '../../styles/room/roomSideBar.sass'
@@ -13,12 +14,19 @@ import roomStyles from '../../styles/room/room.module.sass';
 
 export default function RoomSideBar() {
     const { push } = useRouter();
-    const { currentRoom, rooms } = useRoom();
+    const { currentRoom, rooms, setIsInit } = useRoom();
     const [openDialog, setOpenDialog] = useState(false);
     const { userData } = useUser();
+    const { socket } = useSocket();
 
     const handleClickOpen = () => setOpenDialog(true);
     const handleClickCLose = () => setOpenDialog(false);
+    const handleSignOut = () => {
+        signOut({ callbackUrl: '/' });
+        socket.emit('disconnection', rooms);
+        socket.close();
+        setIsInit(false);
+    }
     
     return (
         <div className={`${roomStyles.roomSection} roomSideBar`}>
@@ -69,7 +77,7 @@ export default function RoomSideBar() {
                 </button>
                 <button
                     className={`${styles.button} ${styles.buttonSecondary}`}
-                    onClick={() => signOut({ callbackUrl: '/' })}
+                    onClick={handleSignOut}
                 >
                     Sign out
                 </button>

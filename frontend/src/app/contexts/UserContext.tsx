@@ -16,6 +16,7 @@ import IUser from '../interfaces/IUser';
 
 
 const initialData = {
+    isFetched: false,
     userData: {
         name: '',
         id: '',
@@ -36,8 +37,9 @@ function UserProvider({
 }: {
     children: ReactNode
 }) {
-    const { pathname } = useRouter();
-    const { data: session } = useSession();
+    const { pathname, push } = useRouter();
+    const { data: session, status } = useSession();
+    const [isFetched, setIsFetched] = useState(false);
     const [userData, setUserData] = useState<IUser>(initialData.userData);
 
     useEffect(() => {
@@ -48,10 +50,16 @@ function UserProvider({
     }, [socket, userData, session, pathname]);
 
     useEffect(() => {
+        if (pathname === '/' || status === 'unauthenticated') return;
+
         function onGetCurrentUser(data: any) {
-            if (!data.length) return;
-            const { name, id, avatar_color, room_list } = data[0];
+            setIsFetched(true);
+            if (!data.length) {
+                push('/signup');
+                return;
+            };
             
+            const { name, id, avatar_color, room_list } = data[0];
             setUserData({
                 name: name,
                 id: id,
@@ -65,12 +73,13 @@ function UserProvider({
         return () => {
             socket.off('getCurrentUser', onGetCurrentUser);
         }
-    }, [])
+    }, [pathname, status])
 
 
 
     return (
         <UserContext.Provider value={{
+            isFetched,
             userData,
             setUserData
         }}>

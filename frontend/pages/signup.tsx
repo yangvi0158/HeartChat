@@ -1,13 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
-import Image from 'next/image';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import { colorList } from '@/app/configs/constant';
 import { socket } from '@/app/socket';
+import { useUser } from '@/app/contexts/UserContext'; 
 import '@/app/styles/signup.sass';
 import styles from '@/app/styles/index.module.sass';
 
@@ -17,20 +18,24 @@ interface User {
 }
 
 
-export default function Signup() {
-    const { data: session, status } = useSession();
+export default function Signup() {    
+    const { userData, isFetched } = useUser();
+    const { data: session } = useSession();
     const [userInfo, setUserInfo] = useState<User>({
         name: '',
         avatarColor: colorList[0]
     });
     const { push } = useRouter();
 
+    useEffect(() => {
+        if (isFetched && userData.id) push('/room/init');
+    }, [userData.id])
+
     const addUser = () => {
         if (!userInfo.name.length) return;
         const { user } = session;
 
         if (user) {
-            console.log('user id', user.id)
             socket.emit('addUser', {
                 id: user.id,
                 name: userInfo.name,
@@ -39,6 +44,12 @@ export default function Signup() {
         }
         push('/room/init');
     }
+
+    if (!isFetched) return (
+        <Stack justifyContent="center" alignItems="center" sx={{height: '100vh'}}>
+            <CircularProgress color="secondary" size="40px"/>
+        </Stack>
+    )
 
     return (
         <Stack

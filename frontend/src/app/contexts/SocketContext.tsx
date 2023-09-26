@@ -13,7 +13,6 @@ import { socket } from '../socket';
 
 const initialData = {
     socket: socket,
-    //roomUsers: {},
     messages: {},
     socketId: ''
 }
@@ -30,7 +29,6 @@ export default function SocketProvider({
 }) {
     const { push } = useRouter();
     const [socketId, setSocketId] = useState('');
-    const [roomUsers, setRoomUsers] = useState({});
     const [messages, setMessages] = useState({});
 
     useEffect(() => {
@@ -40,7 +38,6 @@ export default function SocketProvider({
             socket.disconnect();
         };
     }, []);
-    
 
     useEffect(() => {
         function onReceiveMsg(data: any) {

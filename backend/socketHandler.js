@@ -76,7 +76,8 @@ module.exports = (io) => {
                     id: '',
                     time: new Date(),
                     socketId: 'wsSystem',
-                    roomId: room
+                    roomId: room,
+                    imageUrl: ''
                 })
                 socket.emit('addRoom', roomId);
             }
@@ -104,7 +105,8 @@ module.exports = (io) => {
                     id: '',
                     time: new Date(),
                     socketId: 'wsSystem',
-                    roomId: roomId
+                    roomId: roomId,
+                    imageUrl: ''
                 })
                 socket.emit('addRoom', roomId);
 
@@ -137,7 +139,8 @@ module.exports = (io) => {
                 id: '',
                 time: new Date(),
                 socketId: 'wsSystem',
-                roomId: roomId
+                roomId: roomId,
+                imageUrl: ''
             })
 
             await getRooms(userId, this);

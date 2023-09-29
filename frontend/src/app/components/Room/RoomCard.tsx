@@ -6,10 +6,11 @@ import {colorList} from '../../configs/constant';
 
 type Props = {
     active: boolean,
-    room: any
+    room: any,
+    hasUnreadMsg: boolean
 }
 
-export default function RoomCard({active, room}: Props) {
+export default function RoomCard({active, room, hasUnreadMsg}: Props) {
     const { room_name, online_user_amount } = room[0];
     const getAvatarColor = useCallback(() => {
         const max = colorList.length;
@@ -45,7 +46,7 @@ export default function RoomCard({active, room}: Props) {
                     </span>
                 </div>
             </Stack>
-            <div className="room--notifications">2</div>
+            {hasUnreadMsg && <div className="room--notifications"></div>}
         </Stack>
     )
 }

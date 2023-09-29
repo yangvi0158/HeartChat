@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 import Stack from '@mui/material/Stack';
 import CircularProgress from '@mui/material/CircularProgress';
 
@@ -11,10 +12,25 @@ import RoomMain from '@/app/components/Room/RoomMain';
 import '@/app/styles/room.sass';
 
 export default function Room () {
-    const { socket } = useSocket();
+    const { socket, messages, setLastSeenMsg } = useSocket();
     const { setRooms } = useRoom();
     const { userData } = useUser();
     const openSnackBar = useSnackBar();
+    const { query } = useRouter();
+    const { roomId } = query;
+
+    useEffect(() => {
+        const roomMessage = messages[roomId] || [];
+        if (roomId && roomMessage.length) {
+            const {text, time} = roomMessage.findLast((item: any) => item.id !== userData.id) || {};
+            if (text && time) {
+                setLastSeenMsg((prev: any) => ({
+                    ...prev,
+                    [`${roomId}`]: text + time
+                }))
+            }
+        }
+    }, [messages, roomId, userData.id])
 
     useEffect(() => {
         if (!socket) return;

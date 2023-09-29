@@ -17,7 +17,7 @@ export default function RoomSideBar() {
     const { currentRoom, rooms, setIsInit } = useRoom();
     const [openDialog, setOpenDialog] = useState(false);
     const { userData } = useUser();
-    const { socket } = useSocket();
+    const { socket, messages, lastSeenMsg } = useSocket();
 
     const handleClickOpen = () => setOpenDialog(true);
     const handleClickCLose = () => setOpenDialog(false);
@@ -53,6 +53,11 @@ export default function RoomSideBar() {
                 {rooms && rooms.map((room, key) => {
                     const roomId = room[0]?.room_id;
                     const currentRoomId = currentRoom[0]?.room_id;
+                    const roomMsgs = messages[roomId] || [];
+                    const lastRoomMsgs = roomMsgs.findLast((item: any) => item.id !== userData.id) || {}
+                    const hasUnreadMsg = !roomMsgs.length
+                        ? false
+                        : lastRoomMsgs.text && (lastSeenMsg[roomId] !== lastRoomMsgs.text + lastRoomMsgs.time)
                     return (
                         <div
                             onClick={() => {
@@ -63,6 +68,7 @@ export default function RoomSideBar() {
                             <RoomCard
                                 room={room}
                                 active={roomId === currentRoomId}
+                                hasUnreadMsg={hasUnreadMsg}
                             />
                         </div>
                     )

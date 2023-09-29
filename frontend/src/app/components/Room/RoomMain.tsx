@@ -68,10 +68,13 @@ export default function RoomMain() {
                     )}
                 </Stack>
             </Stack>
-            <div className="chat--container">
+            <Stack
+                className="chat--container"
+                flexDirection="column"
+            >
                 <ChatBody/>
                 <ChatAction/>
-            </div>
+            </Stack>
             <ShareRoomDialog open={openDialog} closeDialog={handleClickCLose}/>
         </div>
     )

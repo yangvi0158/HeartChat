@@ -14,7 +14,9 @@ import { socket } from '../socket';
 const initialData = {
     socket: socket,
     messages: {},
-    socketId: ''
+    socketId: '',
+    lastSeenMsg: {},
+    setLastSeenMsg: (obj: any) => {}
 }
 const SocketContext = createContext(initialData);
 
@@ -30,6 +32,7 @@ export default function SocketProvider({
     const { push } = useRouter();
     const [socketId, setSocketId] = useState('');
     const [messages, setMessages] = useState({});
+    const [lastSeenMsg, setLastSeenMsg] = useState({});
 
     useEffect(() => {
         socket.connect();
@@ -71,7 +74,9 @@ export default function SocketProvider({
         <SocketContext.Provider value={{
             socket,
             messages,
-            socketId
+            socketId,
+            lastSeenMsg,
+            setLastSeenMsg
         }}>
             {children}
         </SocketContext.Provider>

@@ -6,6 +6,7 @@ import Tooltip from '@mui/material/Tooltip';
 import ChatBody from '../Chat/ChatBody';
 import ChatAction from '../Chat/ChatAction';
 import ShareRoomDialog from '../Dialog/ShareRoomDialog';
+import ConfirmDialog from '../Dialog/ConfirmDialog';
 import '../../styles/room/roomMain.sass'
 import styles from '../../styles/index.module.sass';
 import roomStyles from '../../styles/room/room.module.sass';
@@ -15,22 +16,20 @@ import { useRoom } from '../../contexts/RoomContext';
 import { globalRoomId } from '../../configs/constant';
 
 export default function RoomMain() {
-    const [openDialog, setOpenDialog] = useState(false);
+    const [openShareDialog, setOpenShareDialog] = useState(false);
+    const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
     const { socket } = useSocket();
     const { userData } = useUser();
     const { currentRoom } = useRoom();
     const { room_id, room_name } = currentRoom[0] || '';
 
-    const handleClickOpen = () => setOpenDialog(true);
-    const handleClickCLose = () => setOpenDialog(false);
-
-    // TODO 
     const handleLeaveRoom = () => {
         socket.emit('leaveRoom', {
             roomId: currentRoom[0].room_id,
             userId: userData.id,
             userName: userData.name
         });
+        setOpenConfirmDialog(false);
     }
 
     return (
@@ -49,7 +48,7 @@ export default function RoomMain() {
                         <Tooltip title="Invite/Share">
                             <button
                                 className={`${styles.button}`}
-                                onClick={handleClickOpen}
+                                onClick={() => setOpenShareDialog(true)}
                             >
                                 Invite
                             </button>
@@ -61,7 +60,7 @@ export default function RoomMain() {
                                 ${styles.button}
                                 ${styles.buttonSecondary}
                             `}
-                            onClick={handleLeaveRoom}
+                            onClick={() => setOpenConfirmDialog(true)}
                         >
                             Leave
                         </button>
@@ -75,7 +74,13 @@ export default function RoomMain() {
                 <ChatBody/>
                 <ChatAction/>
             </Stack>
-            <ShareRoomDialog open={openDialog} closeDialog={handleClickCLose}/>
+            <ShareRoomDialog open={openShareDialog} closeDialog={() => setOpenShareDialog(false)}/>
+            <ConfirmDialog
+                open={openConfirmDialog}
+                closeDialog={() => setOpenConfirmDialog(false)}
+                handleConfirm={handleLeaveRoom}
+                content="Are you sure you want to leave this room?"
+            />
         </div>
     )
 }

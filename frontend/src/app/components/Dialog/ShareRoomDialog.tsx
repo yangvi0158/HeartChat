@@ -37,11 +37,11 @@ export default function DialogComponent({
     return (
         <div>
             <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-                <DialogTitle>Share</DialogTitle>
+                {/* <DialogTitle>Share</DialogTitle>
                 <DialogContent>
                     <TwitterIcon />
-                </DialogContent>
-                <DialogTitle>Or Copy Room ID</DialogTitle>
+                </DialogContent> */}
+                <DialogTitle>Copy Room ID</DialogTitle>
                 <DialogContent>
                     <Stack direction="row" alignItems="center">
                         <TextField

@@ -8,6 +8,7 @@ import { UserProvider } from '@/app/contexts/UserContext';
 import { SocketProvider } from '@/app/contexts/SocketContext';
 import { RoomProvider } from '@/app/contexts/RoomContext';
 import { SnackBarProvider } from '@/app/hooks/useSnackBar';
+import { ZoomInImageProvider } from '@/app/hooks/useZoomInImage';
 import theme from '@/app/styles/theme';
 import '@/app/styles/global.sass'
 import '@/app/styles/normalize.css';
@@ -30,7 +31,9 @@ export default function App({
                 <ThemeProvider theme={theme}>
                     <AnimatePresence mode="wait">
                       <SnackBarProvider>
-                        <Component {...pageProps}/>
+                        <ZoomInImageProvider>
+                          <Component {...pageProps}/>
+                        </ZoomInImageProvider>
                       </SnackBarProvider>
                     </AnimatePresence>
                 </ThemeProvider>

@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 import { useUser } from '../../contexts/UserContext';
 import { useRoom } from '../../contexts/RoomContext';
 import { useSocket } from '@/app/contexts/SocketContext';
+import { useZoomInImage } from '@/app/hooks/useZoomInImage';
 import '../../styles/chat/ChatBody.sass';
 
 export default function ChatBody() {
@@ -12,6 +13,7 @@ export default function ChatBody() {
     const { currentRoom } = useRoom();
     const { room_id } = currentRoom[0] || 0;
     const chatBottomRef = useRef<HTMLDivElement>(null);
+    const { setImageUrl } = useZoomInImage();
 
     useEffect(() => {
         chatBottomRef.current?.scrollIntoView({
@@ -21,7 +23,7 @@ export default function ChatBody() {
     
     return (
         <div className="chatBody">
-            {messages[room_id] && (messages[room_id]).map((msg, key) => 
+            {messages[room_id] ? (messages[room_id]).map((msg, key) => 
                 msg.socketId === 'wsSystem' ? (
                     <Stack
                         className="message-item"
@@ -42,8 +44,9 @@ export default function ChatBody() {
                             {
                                 msg.imageUrl ? (
                                 <img
+                                    className="image"
                                     src={process.env.NEXT_PUBLIC_S3_IMAGE_URL + msg.imageUrl}
-                                    style={{maxWidth: '150px', borderRadius: '15px', border: 'solid 1px #E6EAEE'}}
+                                    onClick={() => setImageUrl(process.env.NEXT_PUBLIC_S3_IMAGE_URL + msg.imageUrl)}
                                 ></img>
                             ):(
                                 <span className="message">{msg.text}</span>
@@ -68,8 +71,9 @@ export default function ChatBody() {
                             <p className="name">{msg.name}</p>
                             {msg.imageUrl ? (
                                 <img
-                                    src={`https://heartchat-repo.s3.eu-west-2.amazonaws.com/images/${msg.imageUrl}`}
-                                    style={{maxWidth: '150px', borderRadius: '15px', border: 'solid 1px #E6EAEE'}}
+                                    className="image"
+                                    src={process.env.NEXT_PUBLIC_S3_IMAGE_URL + msg.imageUrl}
+                                    onClick={() => setImageUrl(process.env.NEXT_PUBLIC_S3_IMAGE_URL + msg.imageUrl)}
                                 ></img>
                             ):(
                                 <span className="message">{msg.text}</span>
@@ -80,6 +84,10 @@ export default function ChatBody() {
                         </Stack>
                     </Stack>
                 )
+            ):(
+                <Stack alignItems="center" sx={{height: '100%'}}>
+                    <p style={{color: '#b3c1ce', fontSize: '15px'}}>Say Hi To Everyone!</p>
+                </Stack>
             )}
             <div id="chatBody-bottom" ref={chatBottomRef}></div>
         </div>

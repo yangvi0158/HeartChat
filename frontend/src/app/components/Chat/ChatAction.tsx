@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, KeyboardEvent } from 'react';
+import React, { useState, useEffect, useRef, KeyboardEvent } from 'react';
 import EmojiPicker, { EmojiClickData } from 'emoji-picker-react';
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import Image from 'next/image';
@@ -21,11 +21,11 @@ export default function ChatAction() {
     const [sendable, setSendable] = useState(true);
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const [imageUrl, setImageUrl] = useState('');
-    const [imageFile, setImageFile] = useState();
+    const [imageFile, setImageFile] = useState<File|undefined>();
     const [isShowError, setIsShowError] = useState(false);
-    const emojiPickerRef = useRef<any>(null);
-    const inputRef = useRef(null);
-    const imageInputRef = useRef(null);
+    const emojiPickerRef = useRef<HTMLElement>();
+    const inputRef = useRef<HTMLInputElement>(null);
+    const imageInputRef = useRef<HTMLInputElement>(null);
     const client = new S3Client({
         region: 'eu-west-2',
         credentials: {
@@ -34,9 +34,9 @@ export default function ChatAction() {
         }
     });
 
-    const clickOutside = (e: any) => {
+    const clickOutside = (e: MouseEvent) => {
         if (
-            !(emojiPickerRef.current.contains(e.target))
+            !(emojiPickerRef?.current?.contains(e.target as HTMLElement))
             || e.target === emojiPickerRef.current
         ){
             setShowEmojiPicker(false);
@@ -66,12 +66,11 @@ export default function ChatAction() {
 
     const insertEmoji = (emojiData: EmojiClickData) => {
         if (!inputRef.current) return;
-        const { selectionStart, selectionEnd } = inputRef.current;
-        
+        const { selectionStart, selectionEnd } = inputRef.current || {};
         setInput((prev => (
-            prev.substring(0, selectionStart)
+            prev.substring(0, selectionStart || 0)
             + emojiData.emoji
-            + prev.substring(selectionEnd)
+            + prev.substring(selectionEnd || 0)
         )));
         setShowEmojiPicker(false);
         inputRef.current.focus();
@@ -85,12 +84,12 @@ export default function ChatAction() {
                 id: userData.id,
                 time: new Date(),
                 socketId: socketId,
-                roomId: currentRoom[0].room_id,
+                roomId: currentRoom[0]['room_id'],
                 imageUrl: ''
             });
             setInput('');
         }
-        if (imageUrl && !isShowError) {
+        if (imageFile && !isShowError) {
             const imageId = imageFile.lastModified + "_" + imageFile.name;
             setTimeout(() => {
                 socket.emit('sendMessage', {
@@ -99,17 +98,17 @@ export default function ChatAction() {
                     id: userData.id,
                     time: new Date(),
                     socketId: socketId,
-                    roomId: currentRoom[0].room_id,
+                    roomId: currentRoom[0]['room_id'],
                     imageUrl: encodeURIComponent(imageId)
                 });
-            }, 500)
+            }, 700)
             handleUploadImage();
             removeImage();
         }
     }
 
-    const isFileOverSize = (file) => {
-        if (!file) return;
+    const isFileOverSize = (file:File) => {
+        if (!file) return false;
         const fileSize = file.size;
         const fileMb = fileSize / 1024 ** 2;
         if (fileMb > 2) return true;
@@ -119,17 +118,19 @@ export default function ChatAction() {
     const removeImage = () => {
         setImageUrl('');
         setImageFile(undefined);
-        imageInputRef.current.value = '';
+        imageInputRef.current!.value = '';
     }
 
-    const previewImage = (evt: any) => {
-        const file = evt.target.files[0];
-        if (!file) return;
-        let isOverSize = isFileOverSize(file);
-        setIsShowError(isOverSize);
-        setImageUrl(URL.createObjectURL(file));
-        setImageFile(file);
-        inputRef.current.focus();
+    const previewImage = (evt: React.ChangeEvent<HTMLInputElement>) => {
+        const target = evt.target as HTMLInputElement;
+        if (target.files && target.files.length) {
+            const file = target.files[0];
+            let isOverSize = isFileOverSize(file);
+            setIsShowError(isOverSize);
+            setImageUrl(URL.createObjectURL(file));
+            setImageFile(file);
+            inputRef.current!.focus();
+        }
     }
 
     const handleUploadImage= async () => {

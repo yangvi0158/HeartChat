@@ -13,8 +13,8 @@ import { useSocket } from './SocketContext';
 const initialData = {
     rooms: [],
     currentRoom: [],
-    setRooms: (list:[]) => {},
-    setCurrentRoom: (id:string) => {},
+    setRooms: (list: any) => {},
+    setCurrentRoom: (room:[]) => {},
     setIsInit: (isInit: boolean) => {}
 }
 
@@ -30,18 +30,18 @@ export default function RoomProvider({
 }) {
     const { socket } = useSocket();
     const { query, push } = useRouter();
-    const { roomId } = query;
+    const { roomId } = query || '';
     const [rooms, setRooms] = useState([]);
-    const [currentRoom, setCurrentRoom] = useState<any>([]);
+    const [currentRoom, setCurrentRoom] = useState([]);
     const [isInit, setIsInit] = useState(false);
 
     useEffect(() => {
         if (socket && roomId) {
-            const room = rooms?.find((item) => item[0].room_id === roomId);
+            const room = rooms?.find((item) => item[0]['room_id'] === roomId);
             if (room) {
                 setCurrentRoom(room);
             } else if (rooms?.length) {
-                push(`/room/${rooms[0][0].room_id}`);
+                push(`/room/${rooms[0][0]['room_id']}`);
             }
         }
     }, [roomId, rooms]);

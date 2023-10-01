@@ -32,7 +32,7 @@ export default function Signup() {
 
     const addUser = () => {
         if (!userInfo.name.length) return;
-        const { user } = session;
+        const { user } = session || {};
 
         if (user) {
             socket.emit('addUser', {

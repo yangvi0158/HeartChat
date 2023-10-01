@@ -18,7 +18,7 @@ function useZoomInImage() {
 
 const ZoomInImageProvider = ({children}: ProviderProps) => {
     const [imageUrl, setImageUrl] = useState('');
-    const imageRef = useRef();
+    const imageRef = useRef<HTMLElement>();
 
     useEffect(() => {
         if (imageUrl) document.addEventListener('click', clickOutside, true);
@@ -27,9 +27,9 @@ const ZoomInImageProvider = ({children}: ProviderProps) => {
         }
     }, [imageUrl])
 
-    const clickOutside = (e: any) => {
+    const clickOutside = (e: MouseEvent) => {
         if (
-            !(imageRef.current.contains(e.target))
+            !(imageRef?.current?.contains(e.target as HTMLElement))
             || e.target === imageRef.current
         ){
             setImageUrl('');
@@ -52,17 +52,17 @@ const ZoomInImageProvider = ({children}: ProviderProps) => {
                     justifyContent="center"
                     alignItems="center"
                 >
-                <img
-                    src={imageUrl}
-                    alt="zoom-in-image"
-                    style={{maxHeight: '80vh'}}
-                    {...(imageUrl ? {
-                        ref: imageRef
-                    }:{})}
-                >
-                </img>
-            </Stack>)
-            }
+                    <img
+                        src={imageUrl}
+                        alt="zoom-in-image"
+                        style={{maxHeight: '80vh'}}
+                        {...(imageUrl ? {
+                            ref: imageRef
+                        }:{})}
+                    >
+                    </img>
+                </Stack>
+            )}
         </ZoomInImageContext.Provider>
     )
 }

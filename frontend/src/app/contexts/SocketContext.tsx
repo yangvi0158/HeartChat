@@ -10,6 +10,7 @@ import {
 import { useRouter } from 'next/router';
 
 import { socket } from '../socket';
+import IMessage from '../interfaces/IMessage';
 
 const initialData = {
     socket: socket,
@@ -43,11 +44,10 @@ export default function SocketProvider({
     }, []);
 
     useEffect(() => {
-        function onReceiveMsg(data: any) {
+        function onReceiveMsg(data: IMessage) {
             setMessages((prev) => {
                 const newMessages = {...prev};
                 newMessages[data.roomId] = [...(newMessages[data.roomId] ?? []), data];
-                console.log('newMessages', newMessages)
                 return newMessages;
             })
         }

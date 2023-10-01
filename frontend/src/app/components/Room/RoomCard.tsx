@@ -3,10 +3,11 @@ import Stack from '@mui/material/Stack';
 
 import '../../styles/room/roomCard.sass';
 import {colorList} from '../../configs/constant';
+import IRoom from '@/app/interfaces/IRoom';
 
 type Props = {
     active: boolean,
-    room: any,
+    room: IRoom[],
     hasUnreadMsg: boolean
 }
 

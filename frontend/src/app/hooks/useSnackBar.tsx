@@ -1,12 +1,6 @@
 import { useState, useEffect, createContext, useContext, ReactNode } from 'react'
-import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar'
-import MuiAlert, { AlertProps } from '@mui/material/Alert'
-
-export const SnackBarContext = createContext(null)
-
-function useSnackBar() {
-    return useContext(SnackBarContext)
-}
+import Snackbar from '@mui/material/Snackbar'
+import MuiAlert from '@mui/material/Alert'
 
 type ProviderProps = {
     children: ReactNode
@@ -15,6 +9,14 @@ type ProviderProps = {
 type ConfigTypes = {
     text: string,
     status: 'error' | 'warning' | 'success' | 'info'
+}
+
+const initialState = (config: ConfigTypes) => {}
+
+export const SnackBarContext = createContext(initialState)
+
+function useSnackBar() {
+    return useContext(SnackBarContext)
 }
 
 const SnackBarProvider = ({ children }: ProviderProps) => {

@@ -40,7 +40,7 @@
     "prettier": "^3.0.2"
   },
   "lint-staged": {
-    ".{js, jsx, ts, tsx, sass}": [
+    "*.{tsx, ts, js, jsx, sass, json}": [
       "prettier --write"
     ]
   }

@@ -59,8 +59,12 @@ export default function RoomSideBar() {
             const currentRoomId = currentRoom[0]?.["room_id"];
             const roomMsgs = messages[roomId] || [];
             const lastRoomMsgs =
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
               roomMsgs.findLast((item: IMessage) => item.id !== userData.id) ||
               {};
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             const hasUnreadMsg = !roomMsgs.length
               ? false
               : lastRoomMsgs.text &&

@@ -24,6 +24,8 @@ export default function ChatBody() {
   return (
     <div className="chatBody">
       {messages[room_id] ? (
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         messages[room_id].map((msg, key) =>
           msg.socketId === "wsSystem" ? (
             <Stack

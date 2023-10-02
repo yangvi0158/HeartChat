@@ -26,12 +26,14 @@ export default function Room() {
   const { roomId } = query;
 
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const roomMessage = messages[roomId] || [];
     if (roomId && roomMessage.length) {
       const { text, time } =
         roomMessage.findLast((item: any) => item.id !== userData.id) || {};
       if (text && time) {
-        setLastSeenMsg((prev) => ({
+        setLastSeenMsg((prev: any) => ({
           ...prev,
           [`${roomId}`]: text + time,
         }));

@@ -17,6 +17,7 @@ const initialData = {
   messages: {},
   socketId: "",
   lastSeenMsg: {},
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setLastSeenMsg: (obj: any) => {},
 };
 const SocketContext = createContext(initialData);
@@ -43,6 +44,8 @@ export default function SocketProvider({ children }: { children: ReactNode }) {
     function onReceiveMsg(data: IMessage) {
       setMessages((prev) => {
         const newMessages = { ...prev };
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         newMessages[data.roomId] = [...(newMessages[data.roomId] ?? []), data];
         return newMessages;
       });

@@ -17,6 +17,7 @@ type ConfigTypes = {
   status: "error" | "warning" | "success" | "info";
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const initialState = (config: ConfigTypes) => {};
 
 export const SnackBarContext = createContext(initialState);

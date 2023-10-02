@@ -14,6 +14,7 @@ type ProviderProps = {
 
 const initialState = {
   imageUrl: "",
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setImageUrl: (url: string) => {},
 };
 
@@ -59,6 +60,8 @@ const ZoomInImageProvider = ({ children }: ProviderProps) => {
           justifyContent="center"
           alignItems="center"
         >
+          {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+          {/* @ts-ignore */}
           <img
             src={imageUrl}
             alt="zoom-in-image"

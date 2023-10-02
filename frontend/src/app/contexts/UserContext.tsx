@@ -21,6 +21,7 @@ const initialData = {
     avatarColor: "#1c203f",
     roomList: [] as string[],
   },
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setUserData: (data: IUser) => {},
 };
 

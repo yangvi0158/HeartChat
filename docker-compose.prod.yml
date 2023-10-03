@@ -1,12 +1,14 @@
-version: '3'
+version: '3.8'
 
 services:
-  next-app:
+  frontend:
     container_name: frontend
     build:
       context: ./frontend
       dockerfile: prod.Dockerfile
     restart: always
+    environment:
+      - NODE_ENV=production
     ports:
       - 3000:3000
     networks:

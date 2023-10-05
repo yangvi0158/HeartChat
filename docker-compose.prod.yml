@@ -7,8 +7,6 @@ services:
       context: ./frontend
       dockerfile: prod.Dockerfile
     restart: always
-    env_file:
-      - ./frontend/.env
     environment:
       - NODE_ENV=production
       - NEXTAUTH_SECRET=UG4S6yE6JFeIbx2D3j+YAy9bV9QieOiPo7b5OytKj/8=

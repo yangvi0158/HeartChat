@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 
 const server = require('http').Server(app)
-    .listen(8000, () => {
+    .listen(8000, '0.0.0.0', () => {
         console.log('open server!')
     })
 

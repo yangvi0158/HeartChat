@@ -3,15 +3,21 @@ const app = express();
 
 const server = require('http').Server(app)
     .listen(8000, '0.0.0.0', () => {
-        console.log('open server!')
+        var host = server.address().address
+        var port = server.address().port
+        console.log('open server!', 'host:', host, 'port', port)
     })
 
 const io = require('socket.io')(server, {
     cors: {
-        origin: 'http://heartchat.com',
+        origin: 'http://heart-chat.com',
         methods: ["GET", "POST"]
     }
 })
+
+app.get('/test-connection', function (req, res) {
+    res.send('Connected!');
+});
 
 const {
     getUser,

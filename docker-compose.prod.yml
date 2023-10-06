@@ -29,7 +29,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    restart: always
+    restart: on-failure
     environment:
       - NODE_ENV=production
       - PGHOST=ep-broken-butterfly-78342458.eu-central-1.aws.neon.tech

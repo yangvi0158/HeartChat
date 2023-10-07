@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import Stack from "@mui/material/Stack";
+import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import { motion, Variants } from "framer-motion";
 import { signIn } from "next-auth/react";
@@ -83,8 +84,8 @@ export default function HomePage() {
           </h1>
         </div>
         <p className="header__desc">
-          HeartChat makes it easy and fun to quickly chat with people all around
-          the globe.
+          HeartChat is an online free chat rooms. Here you can meet new friends
+          from all over the world.
         </p>
         <div>
           <button
@@ -146,6 +147,25 @@ export default function HomePage() {
           }}
         ></MotionImage>
       </MotionStack>
+      <Box className="footer">
+        <p>
+          © 2023&nbsp;
+          <a href="https://github.com/viboloveyou12/HeartChat" target="_blank">
+            HeartChat
+          </a>
+          &nbsp;💙 Made by&nbsp;
+          <a
+            href="https://github.com/viboloveyou12"
+            target="_blank"
+            style={{
+              color: "#ff759e",
+            }}
+          >
+            Vivian Yang
+          </a>
+          .
+        </p>
+      </Box>
     </Stack>
   );
 }

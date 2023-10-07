@@ -9,6 +9,7 @@ const server = require('http').Server(app)
     })
 
 const io = require('socket.io')(server, {
+    path: '/node-api',
     cors: {
         origin: '*',
         methods: ["GET", "POST"]

@@ -1,57 +1,102 @@
-import { useState } from 'react';
-import Stack from '@mui/material/Stack';
-import { signOut } from 'next-auth/react';
-import { useSession } from 'next-auth/react';
+import { useState } from "react";
+import { useRouter } from "next/router";
+import Stack from "@mui/material/Stack";
+import { signOut } from "next-auth/react";
 
-import CreateRoomDialog from '../Dialog/CreateRoomDialog';
-import RoomCard from '../Room/RoomCard';
-import '../../styles/room/roomSideBar.sass'
-import styles from '../../styles/index.module.sass';
-import roomStyles from '../../styles/room/room.module.sass';
+import { useUser } from "@/app/contexts/UserContext";
+import { useRoom } from "@/app/contexts/RoomContext";
+import { useSocket } from "@/app/contexts/SocketContext";
+import CreateRoomDialog from "../Dialog/CreateRoomDialog";
+import RoomCard from "../Room/RoomCard";
+import "../../styles/room/roomSideBar.sass";
+import styles from "../../styles/index.module.sass";
+import roomStyles from "../../styles/room/room.module.sass";
+import IMessage from "@/app/interfaces/IMessage";
 
 export default function RoomSideBar() {
-    const [openDialog, setOpenDialog] = useState(false);
+  const { push } = useRouter();
+  const { currentRoom, rooms, setIsInit } = useRoom();
+  const [openDialog, setOpenDialog] = useState(false);
+  const { userData } = useUser();
+  const { socket, messages, lastSeenMsg } = useSocket();
 
-    const handleClickOpen = () => setOpenDialog(true);
-    const handleClickCLose = () => setOpenDialog(false);
+  const handleClickOpen = () => setOpenDialog(true);
+  const handleClickCLose = () => setOpenDialog(false);
+  const handleSignOut = () => {
+    signOut({ callbackUrl: "/" });
+    socket.emit("disconnection", rooms);
+    socket.close();
+    setIsInit(false);
+  };
 
-    const { data: session, status } = useSession();
-    
-    return (
-        <div className={`${roomStyles.roomSection} roomSideBar`}>
-            <Stack 
-                className="selfInfo--block"
-                direction="row"
-                alignItems="center"
-            >
-                <Stack
-                    className="selfInfo--avatar"
-                    justifyContent="center"
-                    alignItems="center"
-                >
-                        V
-                </Stack>
-                <p>viboloveyou12</p>
-            </Stack>
-            <div className="rooms--block">
-                <p className="title">My Rooms</p>
-                <RoomCard active/>
-                <RoomCard />
-                <RoomCard />
-            </div>
-            <Stack className="actions--block">
-                <button
-                    className={`${styles.button}`}
-                    onClick={handleClickOpen}
-                >Create Room</button>
-                <button
-                    className={`${styles.button} ${styles.buttonSecondary}`}
-                    onClick={() => signOut({ callbackUrl: '/' })}
-                >
-                    Sign out
-                </button>
-                <CreateRoomDialog open={openDialog} closeCallback={handleClickCLose}/>
-            </Stack>
-        </div>
-    )
+  return (
+    <div className={`${roomStyles.roomSection} roomSideBar`}>
+      <Stack
+        className="selfInfo--block"
+        direction="row"
+        alignItems="center"
+        onClick={() => {
+          push("/");
+        }}
+      >
+        <Stack
+          className="selfInfo--avatar"
+          justifyContent="center"
+          alignItems="center"
+          sx={{
+            backgroundColor: userData.avatarColor,
+          }}
+        >
+          {userData.name && userData.name[0].toUpperCase()}
+        </Stack>
+        <p>{userData.name && userData.name}</p>
+      </Stack>
+      <div className="rooms--block">
+        <p className="title">My Rooms</p>
+        {rooms &&
+          rooms.map((room, key) => {
+            const roomId = room[0]["room_id"];
+            const currentRoomId = currentRoom[0]?.["room_id"];
+            const roomMsgs = messages[roomId] || [];
+            const lastRoomMsgs =
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
+              roomMsgs.findLast((item: IMessage) => item.id !== userData.id) ||
+              {};
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            const hasUnreadMsg = !roomMsgs.length
+              ? false
+              : lastRoomMsgs.text &&
+                lastSeenMsg[roomId] !== lastRoomMsgs.text + lastRoomMsgs.time;
+            return (
+              <div
+                onClick={() => {
+                  push(`/room/${roomId}`);
+                }}
+                key={key}
+              >
+                <RoomCard
+                  room={room}
+                  active={roomId === currentRoomId}
+                  hasUnreadMsg={hasUnreadMsg}
+                />
+              </div>
+            );
+          })}
+      </div>
+      <Stack className="actions--block">
+        <button className={`${styles.button}`} onClick={handleClickOpen}>
+          Create Room
+        </button>
+        <button
+          className={`${styles.button} ${styles.buttonSecondary}`}
+          onClick={handleSignOut}
+        >
+          Sign out
+        </button>
+        <CreateRoomDialog open={openDialog} closeDialog={handleClickCLose} />
+      </Stack>
+    </div>
+  );
 }

@@ -2,13 +2,15 @@
 
 .roomSideBar
     flex: 1
+    max-width: 400px
     @include respond-lg
         flex: 2
     @include respond-md
-        max-width: 90px
+        max-width: 85px
     .selfInfo--block
         color: white
         margin-bottom: 30px
+        cursor: pointer
         p
             margin: 0
             @include respond-md
@@ -16,20 +18,19 @@
         .selfInfo--avatar
             width: 40px
             height: 40px
-            background-color: $blue
             border-radius: 10px
             font-size: 20px
             margin-right: 15px
 
     .rooms--block
-        overflow: hidden
         height: calc(100% - 170px)
         color: $whiteText
+        @include scrollbar-vertical
         .title
             margin-bottom: 30px
             font-size: 20px
             font-weight: 500
-            
+
     .actions--block
         button
             @include respond-md

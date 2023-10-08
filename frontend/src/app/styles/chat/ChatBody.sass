@@ -2,25 +2,36 @@
 
 .chatBody
     width: 100%
-    height: calc(100% - 50px)
-    overflow: hidden
+    height: 100%
     color: #526681
+    @include scrollbar-vertical
     .message-item
         margin: 15px 0
         font-size: 12px
+        width: 100%
+        .name
+            margin-bottom: 5px
+        .message
+            font-size: 15px
+            padding: 15px
+            background-color: #EBEDFA
+            border-radius: 20px
+            box-sizing: content-box
+            max-width: 50%
+            @include ellipsis
+            @include text-sm
+        .time
+            margin: 5px 0
         .avatar
             @include circle(30px, #F9D185)
             color: white
             margin-right: 10px
-        p
-            margin-bottom: 5px
-        .name
+        .image
+            max-width: 150px
+            border-radius: 15px
+            border: solid 1px #E6EAEE
+            cursor: pointer
+    .self
         .message
-            font-size: 15px
-            padding: 15px
-            max-width: 700px
-            background-color: #EBEDFA
-            border-radius: 20px
-            @include text-sm
-        .time
-            margin: 5px 0
+            background-color: $pink
+            color: white

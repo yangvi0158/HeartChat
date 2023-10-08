@@ -2,35 +2,33 @@
 
 .roomcard--container
     padding: 10px 15px
-    //border-radius: 15px
+    border-right: transparent 4px solid
     cursor: pointer
-    transition: .2s
     .room
         &--avatar
-            color: #FF6666
             font-weight: 700
             margin-right: 20px
             @include circle(40px, white)
         &--desc
+            max-width: 200px
             @include respond-md
                 display: none
             p, span
                 margin: 0
                 padding: 2px
-            p
-                @include ellipsis
             .name
                 font-size: 15px
                 white-space: nowrap
+                @include ellipsis
             .status
                 font-size: 12px
-            &::after 
+            .online::after 
                 content: ''
                 display: inline-block
                 margin: 0 10px
                 @include circle(8px, $lightGreen)
         &--notifications
-            @include circle(20px, $red)
+            @include circle(12px, $red)
             font-size: 13px
             @include respond-md
                 display: none

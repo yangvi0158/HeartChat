@@ -48,9 +48,9 @@ const image: Variants = {
 };
 
 export default function HomePage() {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const { userData } = useUser();
-  console.log("session", session, "useData", userData);
+  // console.log("session", session, "useData", userData);
 
   let buttonContent;
   if (status === "loading") {

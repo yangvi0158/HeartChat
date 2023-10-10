@@ -96,3 +96,6 @@ Compose is a tool for defining and running multi-container Docker applications.
 | Pink           | ![#FF759E](https://via.placeholder.com/10/FF759E?text=+) `#FF759E` |
 | Light Green    | ![#89FF8E](https://via.placeholder.com/10/89FF8E?text=+) `#89FF8E` |
 | White          | ![#FFFFFF](https://via.placeholder.com/10/FFFFFF?text=+) `#FFFFFF` |
+
+## 📄 License
+MIT

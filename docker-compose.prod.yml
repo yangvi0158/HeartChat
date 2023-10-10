@@ -8,7 +8,7 @@ services:
       dockerfile: prod.Dockerfile
     restart: always
     environment:
-    # create an .env file at the same directory level of docker-compose.yml
+      # create an .env file at the same directory level of docker-compose.yml
       - NODE_ENV=production
       - NEXT_PUBLIC_BASE_URL=${NEXT_PUBLIC_BASE_URL}
       - NEXTAUTH_URL=${NEXTAUTH_URL}

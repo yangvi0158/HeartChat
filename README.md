@@ -15,6 +15,15 @@
 </p>
 <img src="../serve-image/frontend/public/readme_hompage.png" alt="HeartChat1" title="HeartChat homepage">
 
+## Table Of Contents
+
+- [Features](#-features)
+- [Built With](#-built-with)
+- [Prerequisites](#-prerequisites)
+- [Installation & Set Up](#-installation--set-up)
+- [Building and Running for Production via Docker-Compose](#-building-and-running-for-production-via-docker-compose)
+- [Color Reference](#-color-reference)
+
 ## 🌈 Features
 - Third-party login (Google, Twitter, Github)
 - Users can create, join, and leave multiple chatrooms

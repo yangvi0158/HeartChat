@@ -52,12 +52,15 @@
 ```
 
 ## 🚀 Building and Running for Production via Docker-Compose
+Compose is a tool for defining and running multi-container Docker applications.
+[Documentation](https://docs.docker.com/compose/)
 
 1. cd into cloned directory
    ```sh
    cd HeartChat
    ```
 2. Create a network, which allows containers to communicate with each other, by using their container name as a hostname
+[Read More](https://docs.docker.com/compose/networking/)
   ```sh
    docker network create my_network
    ```
@@ -75,15 +78,12 @@
    docker ps
    ```
 
-## ENV
-
 ## 🎨 Color Reference
 
 | Color          | Hex                                                                |
 | -------------- | ------------------------------------------------------------------ |
-| Beige           | ![#EAE4DF](https://via.placeholder.com/10/EAE4DF?text=+) `#EAE4DF` |
-| Green     | ![#22FFB5](https://via.placeholder.com/10/22FFB5?text=+) `#22FFB5` |
-| Black  | ![#000000](https://via.placeholder.com/10/000000?text=+) `#000000` |
+| Dark Blue      | ![#22274D](https://via.placeholder.com/10/22274D?text=+) `#22274D` |
+| Blue           | ![#0797FF](https://via.placeholder.com/10/0797FF?text=+) `#0797FF` |
+| Pink           | ![#FF759E](https://via.placeholder.com/10/FF759E?text=+) `#FF759E` |
+| Light Green    | ![#89FF8E](https://via.placeholder.com/10/89FF8E?text=+) `#89FF8E` |
 | White          | ![#FFFFFF](https://via.placeholder.com/10/FFFFFF?text=+) `#FFFFFF` |
-
-postgres

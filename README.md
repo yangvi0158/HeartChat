@@ -73,7 +73,7 @@ Compose is a tool for defining and running multi-container Docker applications.
   ```sh
    docker network create my_network
    ```
-3. Build Docker Image
+3. Build Docker Images
    ```sh
    docker-compose -f docker-compose.prod.yml build
    ```

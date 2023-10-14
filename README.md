@@ -2,7 +2,7 @@
   <img src="/frontend/public/heartChat-logo.svg?raw=true " alt="Alt text" title="Optional title">
 </div>
 <h1 align="center">
-  HeartChat - v1
+  HeartChat
 </h1>
 <p align="center">
   <a href="https://heart-chat.com" target="_blank">https://heart-chat.com</a>

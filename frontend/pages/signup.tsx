@@ -14,7 +14,7 @@ import "@/app/styles/signup.sass";
 
 interface User {
   name: string;
-  avatarColor: string;
+  avatar_color: string;
 }
 
 export default function Signup() {
@@ -22,7 +22,7 @@ export default function Signup() {
   const { data: session } = useSession();
   const [userInfo, setUserInfo] = useState<User>({
     name: "",
-    avatarColor: colorList[0],
+    avatar_color: colorList[0],
   });
   const { push } = useRouter();
 
@@ -38,7 +38,7 @@ export default function Signup() {
       socket.emit("addUser", {
         id: user.id,
         name: userInfo.name,
-        avatar_color: userInfo.avatarColor,
+        avatar_color: userInfo.avatar_color,
       });
     }
     push("/room/init");
@@ -96,13 +96,13 @@ export default function Signup() {
               <Box
                 key={key}
                 className={`colorItem ${
-                  userInfo.avatarColor === color && `selectedColor`
+                  userInfo.avatar_color === color && `selectedColor`
                 }
                             `}
                 onClick={() =>
                   setUserInfo((prev) => ({
                     ...prev,
-                    avatarColor: color,
+                    avatar_color: color,
                   }))
                 }
                 sx={{

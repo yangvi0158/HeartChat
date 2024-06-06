@@ -44,7 +44,7 @@ export default function RoomSideBar() {
           justifyContent="center"
           alignItems="center"
           sx={{
-            backgroundColor: userData.avatarColor,
+            backgroundColor: userData.avatar_color,
           }}
         >
           {userData.name && userData.name[0].toUpperCase()}

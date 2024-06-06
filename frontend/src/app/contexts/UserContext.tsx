@@ -18,8 +18,11 @@ const initialData = {
   userData: {
     name: "",
     id: "",
-    avatarColor: "#1c203f",
-    roomList: [] as string[],
+    description: "",
+    has_img: false,
+    avatar_color: "#1c203f",
+    room_list: [] as string[],
+    created_at: "",
   },
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setUserData: (data: IUser) => {},
@@ -36,6 +39,7 @@ function UserProvider({ children }: { children: ReactNode }) {
   const { data: session, status } = useSession();
   const [isFetched, setIsFetched] = useState(false);
   const [userData, setUserData] = useState<IUser>(initialData.userData);
+  console.log("userData", userData);
 
   useEffect(() => {
     if (socket && !userData.name && session) {
@@ -56,13 +60,7 @@ function UserProvider({ children }: { children: ReactNode }) {
         return;
       }
 
-      const { name, id, avatar_color, room_list } = data[0];
-      setUserData({
-        name: name,
-        id: id,
-        avatarColor: avatar_color,
-        roomList: room_list,
-      });
+      setUserData(data[0]);
     }
 
     socket.on("getCurrentUser", onGetCurrentUser);

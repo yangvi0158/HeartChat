@@ -14,7 +14,7 @@ import { useRoom } from "@/app/contexts/RoomContext";
 import "../../styles/chat/ChatAction.sass";
 
 export default function ChatAction() {
-  const { socket, socketId } = useSocket();
+  const { socket } = useSocket();
   const { currentRoom } = useRoom();
   const { userData } = useUser();
   const [input, setInput] = useState("");
@@ -92,29 +92,37 @@ export default function ChatAction() {
 
   const sendMessage = async () => {
     if (input.trim() && socket) {
-      socket.emit("sendMessage", {
-        text: input.trim(),
-        name: userData.name,
-        id: userData.id,
-        time: new Date(),
-        socketId: socketId,
-        roomId: currentRoom[0]["room_id"],
-        imageUrl: "",
-      });
+      socket.emit(
+        "sendMessage",
+        {
+          message_type: "text",
+          is_system: false,
+          img_url: "",
+          room_id: currentRoom[0]["room_id"],
+          sender_id: userData.id,
+          sender_name: userData.name,
+          message: input.trim(),
+        },
+        userData.room_list,
+      );
       setInput("");
     }
     if (imageFile && !isShowError) {
       const imageId = imageFile.lastModified + "_" + imageFile.name;
       setTimeout(() => {
-        socket.emit("sendMessage", {
-          text: "--image--",
-          name: userData.name,
-          id: userData.id,
-          time: new Date(),
-          socketId: socketId,
-          roomId: currentRoom[0]["room_id"],
-          imageUrl: encodeURIComponent(imageId),
-        });
+        socket.emit(
+          "sendMessage",
+          {
+            message_type: "image",
+            is_system: false,
+            img_url: encodeURIComponent(imageId),
+            room_id: currentRoom[0]["room_id"],
+            sender_id: userData.id,
+            sender_name: userData.name,
+            message: input.trim(),
+          },
+          userData.room_list,
+        );
       }, 700);
       handleUploadImage();
       removeImage();
@@ -175,6 +183,7 @@ export default function ChatAction() {
         </Box>
         <Box className="button--type">
           <input
+            title="img-input"
             type="file"
             accept=".gif, .jpg, .png, .jpeg"
             name="image"

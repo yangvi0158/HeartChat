@@ -34,7 +34,6 @@ export default function SocketProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     socket.connect();
-
     return () => {
       socket.disconnect();
     };

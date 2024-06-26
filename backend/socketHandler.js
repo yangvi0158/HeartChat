@@ -37,6 +37,20 @@ module.exports = (io) => {
         }
     }
 
+    const updateUser = async function (data) {
+        if (!data) return;
+        const socket = this;
+        try {
+            await psql.updateUser(data)
+            await getUser(data.id, this)
+        } catch (error) {
+            socket.emit('showSnackBar', {
+                msg: error.message,
+                status: 'error'
+            })
+        }
+    }
+
     const getRooms = async function (userId, _self) {
         if (!userId) return;
         const socket = _self ? _self : this;
@@ -211,6 +225,7 @@ module.exports = (io) => {
     return {
         getUser,
         addUser,
+        updateUser,
         getRooms,
         addRoom,
         joinRoom,

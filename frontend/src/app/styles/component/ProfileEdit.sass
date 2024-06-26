@@ -1,0 +1,69 @@
+
+@import '../variables'
+
+.profileEdit
+    margin: 30px 0
+    input, label
+        color: white
+    .avatar-container
+        width: 100px
+        height: 100px
+        border-radius: 60px
+        span
+            font-size: 50px
+            font-weight: bold
+    .selectedAvatar
+        border: solid 3px white
+        transform: scale(1.1)
+    .text-field
+        label
+            opacity: .5
+    .colorItem
+        width: 25px
+        height: 25px
+        border-radius: 25px
+        margin: 5px
+        cursor: pointer
+        &:hover
+            transform: scale(1.1)
+            transition: .1s
+    .colorItem.upload-img
+        background-color: #D6D6D6
+        display: flex
+        justify-content: center
+        align-items: center
+        input
+            display: none
+    .description-container
+        width: 430px
+        margin: 30px
+        .description-btn
+            font-size: 14px
+            max-width: 200px
+            border-radius: 30px
+            padding: 8px 15px
+            margin: 4px
+            background-color: transparent
+            border: solid 3px rgba(255,255,255,.1)
+            color: gray
+            cursor: pointer
+        .description-btn:hover
+            transition: .2s
+            //background-color: white
+            border: solid 3px white
+            color: white
+        .description-btn.selected
+            background-color: white
+            color: $main
+    .cancel-btn
+        background-color: transparent
+        color: $whiteText
+        border: none
+        margin: 30px 0
+        @include hoverEffect
+        
+
+
+
+.text--warn
+    color: $red

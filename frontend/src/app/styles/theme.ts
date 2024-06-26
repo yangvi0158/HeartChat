@@ -29,12 +29,19 @@ const theme = createTheme({
         },
       },
     },
-    MuiSnackbar: {
+    MuiMenu: {
+      styleOverrides: {
+        paper: {
+          backgroundColor: "#272C56",
+          color: "#DCDEED",
+        },
+      },
+    },
+    MuiList: {
       styleOverrides: {
         root: {
-          "& .MuiSnackbarContent-root": {
-            width: "auto",
-          },
+          backgroundColor: "#272C56",
+          color: "#DCDEED",
         },
       },
     },

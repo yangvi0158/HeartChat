@@ -45,7 +45,10 @@ export default function SocketProvider({ children }: { children: ReactNode }) {
         const newMessages = { ...prev };
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        newMessages[data.roomId] = [...(newMessages[data.roomId] ?? []), data];
+        newMessages[data.room_id] = [
+          ...(newMessages[data.room_id] ?? []),
+          data,
+        ];
         return newMessages;
       });
     }

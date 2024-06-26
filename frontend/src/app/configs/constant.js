@@ -8,6 +8,7 @@ const colorList = [
   "#ad9e85",
 ];
 
-const globalRoomId = "e8668385-4f5e-4da7-81f6-e5cb886ea0f2";
+const statusList = ['😄 Happy', '🏝️ Relax', '🥱 Tired', '🤩 Excited', '🦄 Ｍysterious', '🧑‍💻 At work', '🤡 Custom']
+const customStatus = '🤡 Custom'
 
-export { colorList, globalRoomId };
+export { colorList, statusList, customStatus };

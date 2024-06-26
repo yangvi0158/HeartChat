@@ -11,6 +11,7 @@ import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import { useUser } from "@/app/contexts/UserContext";
 import { useSocket } from "@/app/contexts/SocketContext";
 import { useRoom } from "@/app/contexts/RoomContext";
+import { isFileOverSize } from "../../utils/utility";
 import "../../styles/chat/ChatAction.sass";
 
 export default function ChatAction() {
@@ -127,14 +128,6 @@ export default function ChatAction() {
       handleUploadImage();
       removeImage();
     }
-  };
-
-  const isFileOverSize = (file: File) => {
-    if (!file) return false;
-    const fileSize = file.size;
-    const fileMb = fileSize / 1024 ** 2;
-    if (fileMb > 2) return true;
-    return false;
   };
 
   const removeImage = () => {

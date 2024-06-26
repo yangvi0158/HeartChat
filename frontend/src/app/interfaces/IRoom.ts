@@ -1,5 +1,6 @@
 export default interface IRoom {
-  createddate: string;
+  created_at: string;
+  is_global: boolean;
   online_user_amount: number;
   room_id: string;
   room_name: string;

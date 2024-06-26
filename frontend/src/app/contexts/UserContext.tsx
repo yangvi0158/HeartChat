@@ -20,6 +20,7 @@ const initialData = {
     id: "",
     description: "",
     has_img: false,
+    img_id: null,
     avatar_color: "#1c203f",
     room_list: [] as string[],
     created_at: "",

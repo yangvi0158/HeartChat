@@ -20,12 +20,11 @@ const initialData = {
     id: "",
     description: "",
     has_img: false,
-    img_id: null,
+    img_id: "",
     avatar_color: "#1c203f",
     room_list: [] as string[],
     created_at: "",
   },
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setUserData: (data: IUser) => {},
 };
 
@@ -54,7 +53,7 @@ function UserProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (pathname === "/" || status === "unauthenticated") return;
 
-    function onGetCurrentUser(data: any) {
+    function onGetCurrentUser(data: IUser[]) {
       setIsFetched(true);
       if (!data.length) {
         push("/signup");

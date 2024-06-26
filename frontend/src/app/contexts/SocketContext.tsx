@@ -17,7 +17,6 @@ const initialData = {
   messages: {},
   socketId: "",
   lastSeenMsg: {},
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setLastSeenMsg: (obj: any) => {},
 };
 const SocketContext = createContext(initialData);

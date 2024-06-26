@@ -24,8 +24,8 @@ module.exports = (io) => {
 
             /* update online user amount */
             let roomList = {};
-            const test = io.of("/").adapter.rooms;
-            for (let item of test) {
+            const roomsMap = io.of("/").adapter.rooms;
+            for (let item of roomsMap) {
                 roomList[item[0]] = Array.from(item[1]);
             }
             socket.broadcast.emit('updateOnlineUserAmount', roomList);
@@ -129,8 +129,8 @@ module.exports = (io) => {
 
                 /* update online user amount */
                 let roomList = {};
-                const test = io.of("/").adapter.rooms;
-                for (let item of test) {
+                const roomsMap = io.of("/").adapter.rooms;
+                for (let item of roomsMap) {
                     roomList[item[0]] = Array.from(item[1]);
                 }
                 socket.broadcast.emit('updateOnlineUserAmount', roomList);
@@ -166,8 +166,8 @@ module.exports = (io) => {
 
             /* update online user amount */
             let roomList = {};
-            const test = io.of("/").adapter.rooms;
-            for (let item of test) {
+            const roomsMap = io.of("/").adapter.rooms;
+            for (let item of roomsMap) {
                 roomList[item[0]] = Array.from(item[1]);
             }
             socket.broadcast.emit('updateOnlineUserAmount', roomList);
@@ -189,8 +189,8 @@ module.exports = (io) => {
         let roomList = {};
 
         /* update online user amount */
-        const test = io.of("/").adapter.rooms;
-        for (let item of test) {
+        const roomsMap = io.of("/").adapter.rooms;
+        for (let item of roomsMap) {
             roomList[item[0]] = Array.from(item[1])
         }
 
@@ -203,9 +203,9 @@ module.exports = (io) => {
         let roomList = {};
 
         /* update online user amount */
-        const test = io.of("/").adapter.rooms;
+        const roomsMap = io.of("/").adapter.rooms;
         const socketId = socket.id;
-        for (let item of test) {
+        for (let item of roomsMap) {
             let userAmount = Array.from(item[1]).filter((room) => room !== socketId);
             if (userAmount.length) roomList[item[0]] = userAmount;
         }

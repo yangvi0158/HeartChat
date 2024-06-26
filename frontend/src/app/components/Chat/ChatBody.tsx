@@ -1,6 +1,6 @@
 import { useRef, useEffect } from "react";
 import Stack from "@mui/material/Stack";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import utc from "dayjs/plugin/utc";
 import tz from "dayjs/plugin/timezone";
 import { useUser } from "../../contexts/UserContext";
@@ -11,6 +11,13 @@ import "../../styles/chat/ChatBody.sass";
 
 dayjs.extend(utc);
 dayjs.extend(tz);
+
+type MessageProps = {
+  name: string;
+  imgUrl: string;
+  message: string;
+  createAt: Dayjs;
+};
 
 const SystemMessage = ({ message }: { message: string }) => {
   return (
@@ -24,11 +31,7 @@ const SelfMessage = ({
   imgUrl,
   message,
   createAt,
-}: {
-  imgUrl: string;
-  message: string;
-  createAt: any;
-}) => {
+}: Omit<MessageProps, "name">) => {
   const { setImageUrl } = useZoomInImage();
 
   return (
@@ -52,17 +55,7 @@ const SelfMessage = ({
   );
 };
 
-const OtherMessage = ({
-  name,
-  imgUrl,
-  message,
-  createAt,
-}: {
-  name: string;
-  imgUrl: string;
-  message: string;
-  createAt: any;
-}) => {
+const OtherMessage = ({ name, imgUrl, message, createAt }: MessageProps) => {
   const { setImageUrl } = useZoomInImage();
 
   return (

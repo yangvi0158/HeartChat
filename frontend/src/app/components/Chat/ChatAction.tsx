@@ -12,6 +12,7 @@ import { useUser } from "@/app/contexts/UserContext";
 import { useSocket } from "@/app/contexts/SocketContext";
 import { useRoom } from "@/app/contexts/RoomContext";
 import { isFileOverSize } from "../../utils/utility";
+import styles from "../../styles/index.module.sass";
 import "../../styles/chat/ChatAction.sass";
 
 export default function ChatAction() {
@@ -182,10 +183,10 @@ export default function ChatAction() {
             name="image"
             id="file"
             onChange={(e) => previewImage(e)}
-            style={{ display: "none" }}
+            className={styles.none}
             ref={imageInputRef}
           />
-          <label htmlFor="file" style={{ cursor: "pointer" }}>
+          <label htmlFor="file" className={styles.cursor_pointer}>
             <ImageIcon color="secondary" />
           </label>
         </Box>

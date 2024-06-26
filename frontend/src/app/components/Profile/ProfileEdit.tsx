@@ -10,14 +10,21 @@ import { isFileOverSize, isInvalidFileName } from "../../utils/utility";
 import styles from "@/app/styles/index.module.sass";
 import { colorList, statusList, customStatus } from "@/app/configs/constant";
 import "../../styles/component/ProfileEdit.sass";
+import IUser from "@/app/interfaces/IUser";
 
-interface User {
-  name: string;
-  avatar_color: string;
-  description: string;
+type ProfileDataType = Pick<IUser, "name" | "avatar_color" | "description">;
+type ProfileEditPayloadType = Pick<
+  IUser,
+  "name" | "avatar_color" | "has_img" | "description"
+> & { img_id?: string };
+
+interface ProfileEditProps {
+  onSubmit: (data: any) => void;
+  originalImgId?: string;
+  originalData?: ProfileDataType;
 }
 
-const initData = {
+const initData: ProfileDataType = {
   name: "",
   avatar_color: colorList[0],
   description: statusList[0],
@@ -33,7 +40,7 @@ export default function ProfileEdit({
   onSubmit,
   originalImgId = "",
   originalData,
-}) {
+}: ProfileEditProps) {
   const { push } = useRouter();
   const client = new S3Client({
     region: "eu-west-2",
@@ -53,7 +60,7 @@ export default function ProfileEdit({
       : "",
   });
   const [imageErrorTexts, setImageErrorTexts] = useState<string[] | []>([]);
-  const [profile, setProfileData] = useState<User>(
+  const [profile, setProfileData] = useState<ProfileDataType>(
     originalData
       ? {
           name: originalData.name,
@@ -67,10 +74,6 @@ export default function ProfileEdit({
   const [customDesc, setCustomDesc] = useState(
     getDescriptionInitValue(originalData),
   );
-
-  console.log("imageData", imageData);
-  console.log("profile", profile);
-  console.log("customDescription", customDesc);
 
   const handleSelectColor = (color) => {
     setProfileData((prev) => ({
@@ -93,7 +96,7 @@ export default function ProfileEdit({
       ? Date.now() + "_" + imageData.file?.name
       : "";
 
-    const payload: any = {
+    const payload: ProfileEditPayloadType = {
       name,
       avatar_color,
       has_img: Boolean(imageData.url),

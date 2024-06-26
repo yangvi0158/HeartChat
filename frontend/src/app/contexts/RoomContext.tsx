@@ -10,16 +10,25 @@ import {
 } from "react";
 import { useRouter } from "next/router";
 import { useSocket } from "./SocketContext";
+import { IRoomArray, IRoomNestedArray } from "../interfaces/IRoom";
 
-const initialData = {
-  rooms: [],
-  currentRoom: [],
-  setRooms: (list: any) => {},
-  setCurrentRoom: (room: []) => {},
-  setIsInit: (isInit: boolean) => {},
+type RoomContextType = {
+  rooms: IRoomNestedArray;
+  currentRoom: IRoomArray;
+  setRooms: React.Dispatch<React.SetStateAction<IRoomNestedArray>>;
+  setCurrentRoom: React.Dispatch<React.SetStateAction<IRoomArray>>;
+  setIsInit: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const RoomContext = createContext(initialData);
+const initialData: RoomContextType = {
+  rooms: [],
+  currentRoom: [],
+  setRooms: () => {},
+  setCurrentRoom: () => {},
+  setIsInit: () => {},
+};
+
+const RoomContext = createContext<RoomContextType>(initialData);
 
 function useRoom() {
   return useContext(RoomContext);
@@ -28,8 +37,8 @@ export default function RoomProvider({ children }: { children: ReactNode }) {
   const { socket } = useSocket();
   const { query, push } = useRouter();
   const { roomId } = query || "";
-  const [rooms, setRooms] = useState([]);
-  const [currentRoom, setCurrentRoom] = useState([]);
+  const [rooms, setRooms] = useState<IRoomNestedArray>([]);
+  const [currentRoom, setCurrentRoom] = useState<IRoomArray>([]);
   const [isInit, setIsInit] = useState(false);
 
   useEffect(() => {

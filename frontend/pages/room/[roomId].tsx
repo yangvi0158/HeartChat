@@ -10,11 +10,16 @@ import { useSnackBar } from "@/app//hooks/useSnackBar";
 import RoomSideBar from "@/app/components/Room/RoomSideBar";
 import RoomMain from "@/app/components/Room/RoomMain";
 import "@/app/styles/room.sass";
-import IRoom from "@/app/interfaces/IRoom";
+import { IRoomArray, IRoomNestedArray } from "@/app/interfaces/IRoom";
+import IMessage from "@/app/interfaces/IMessage";
 
 type ShowSnackBarProps = {
   msg: string;
   status: "error" | "warning" | "success" | "info";
+};
+
+type UsersAndRoomMapType = {
+  [key: string]: string[];
 };
 
 export default function Room() {
@@ -31,7 +36,8 @@ export default function Room() {
     const roomMessage = messages[roomId] || [];
     if (roomId && roomMessage.length) {
       const { text, time } =
-        roomMessage.findLast((item: any) => item.id !== userData.id) || {};
+        roomMessage.findLast((item: IMessage) => item.id !== userData.id) || {};
+      //TODO Make it work
       if (text && time) {
         setLastSeenMsg((prev: any) => ({
           ...prev,
@@ -50,13 +56,13 @@ export default function Room() {
         status: status,
       });
     }
-    function onGetRooms(result: any) {
+    function onGetRooms(result: IRoomNestedArray) {
       setRooms(result);
     }
-    function onUpdateOnlineUserAmount(list: any) {
-      setRooms((prev: any) => {
+    function onUpdateOnlineUserAmount(list: UsersAndRoomMapType) {
+      setRooms((prev: IRoomNestedArray) => {
         let a = prev;
-        a = a.map((item: IRoom[]) => {
+        a = a.map((item: IRoomArray) => {
           const { room_id } = item[0];
           if (list[room_id]) {
             item[0].online_user_amount = list[room_id].length;

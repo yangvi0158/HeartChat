@@ -5,3 +5,6 @@ export default interface IRoom {
   room_id: string;
   room_name: string;
 }
+
+export type IRoomArray = IRoom[]
+export type IRoomNestedArray = IRoomArray[]

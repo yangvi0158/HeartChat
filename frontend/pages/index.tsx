@@ -150,16 +150,19 @@ export default function HomePage() {
       <Box className="footer">
         <p>
           © 2023&nbsp;
-          <a href="https://github.com/viboloveyou12/HeartChat" target="_blank">
+          <a
+            rel="noopener noreferrer"
+            href="https://github.com/viboloveyou12/HeartChat"
+            target="_blank"
+          >
             HeartChat
           </a>
           &nbsp;💙 Made by&nbsp;
           <a
+            rel="noopener noreferrer"
             href="https://github.com/viboloveyou12"
             target="_blank"
-            style={{
-              color: "#ff759e",
-            }}
+            className="text-hightlight"
           >
             Vivian Yang
           </a>

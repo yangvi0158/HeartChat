@@ -13,7 +13,13 @@ import { useRouter } from "next/router";
 import { socket } from "../socket";
 import IUser from "../interfaces/IUser";
 
-const initialData = {
+type UserContextType = {
+  isFetched: boolean;
+  userData: IUser;
+  setUserData: React.Dispatch<React.SetStateAction<IUser>>;
+};
+
+const initialData: UserContextType = {
   isFetched: false,
   userData: {
     name: "",
@@ -25,7 +31,7 @@ const initialData = {
     room_list: [] as string[],
     created_at: "",
   },
-  setUserData: (data: IUser) => {},
+  setUserData: () => {},
 };
 
 const UserContext = createContext(initialData);

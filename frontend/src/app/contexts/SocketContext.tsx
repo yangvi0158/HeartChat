@@ -12,12 +12,20 @@ import { useRouter } from "next/router";
 import { socket } from "../socket";
 import IMessage from "../interfaces/IMessage";
 
-const initialData = {
+type SocketContextType = {
+  socket: any;
+  messages: any;
+  socketId: string;
+  lastSeenMsg: any;
+  setLastSeenMsg: React.Dispatch<React.SetStateAction<any>>;
+};
+
+const initialData: SocketContextType = {
   socket: socket,
   messages: {},
   socketId: "",
   lastSeenMsg: {},
-  setLastSeenMsg: (obj: any) => {},
+  setLastSeenMsg: () => {},
 };
 const SocketContext = createContext(initialData);
 

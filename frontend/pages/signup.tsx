@@ -9,14 +9,6 @@ import { socket } from "@/app/socket";
 import { useUser } from "@/app/contexts/UserContext";
 import "@/app/styles/signup.sass";
 
-interface User {
-  name: string;
-  avatar_color: string;
-  has_img: boolean;
-  img_url: string;
-  description: string;
-}
-
 export default function Signup() {
   const { userData, isFetched } = useUser();
   const { data: session } = useSession();

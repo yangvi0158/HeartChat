@@ -26,8 +26,8 @@ export default function App({
   return (
     <SessionProvider session={session}>
       <SocketProvider>
-        <RoomProvider>
-          <UserProvider>
+        <UserProvider>
+          <RoomProvider>
             <main className={inter.className}>
               <ThemeProvider theme={theme}>
                 <AnimatePresence mode="wait">
@@ -39,8 +39,8 @@ export default function App({
                 </AnimatePresence>
               </ThemeProvider>
             </main>
-          </UserProvider>
-        </RoomProvider>
+          </RoomProvider>
+        </UserProvider>
       </SocketProvider>
     </SessionProvider>
   );

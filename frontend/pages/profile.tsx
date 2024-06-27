@@ -2,8 +2,8 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import Stack from "@mui/material/Stack";
-import CircularProgress from "@mui/material/CircularProgress";
 
+import FullPageLoading from "@/app/components/FullPageLoading";
 import ProfileEdit from "../src/app/components/Profile/ProfileEdit";
 import { socket } from "@/app/socket";
 import { useUser } from "@/app/contexts/UserContext";
@@ -33,13 +33,7 @@ export default function EditProfile() {
   return (
     <div>
       {!isFetched ? (
-        <Stack
-          justifyContent="center"
-          alignItems="center"
-          sx={{ height: "100vh" }}
-        >
-          <CircularProgress color="secondary" size="40px" />
-        </Stack>
+        <FullPageLoading />
       ) : (
         <Stack
           direction="column"

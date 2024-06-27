@@ -64,3 +64,14 @@ $screen-xl: 1920px
     &::-webkit-scrollbar
         width: 0
         height: 0
+
+@mixin text-ellipsis($width)
+    max-width: $width
+    text-overflow: ellipsis
+    overflow: hidden
+    white-space: nowrap
+
+@mixin align-center
+    display: flex
+    justify-content: center
+    align-items: center

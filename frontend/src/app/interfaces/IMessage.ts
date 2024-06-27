@@ -1,9 +1,10 @@
 export default interface IMessage {
   id: string;
-  imageUrl: "";
-  name: string;
-  roomId: string;
-  socketId: string;
-  text: string;
-  time: string;
+  room_id: string;
+  sender_id: string;
+  message_type: string;
+  message: string;
+  img_url: string;
+  is_system: boolean;
+  create_at: string;
 }

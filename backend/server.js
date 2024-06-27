@@ -23,6 +23,7 @@ app.get('/test-connection', function (req, res) {
 const {
     getUser,
     addUser,
+    updateUser,
     getRooms,
     addRoom,
     joinRoom,
@@ -36,6 +37,7 @@ io.on('connection', async(socket) => {
     console.log('server success connect');
     socket.on('getUser', getUser);
     socket.on('addUser', addUser);
+    socket.on('updateUser', updateUser);
     socket.on('getRooms', getRooms);
     socket.on('addRoom', addRoom);
     socket.on('joinRoom', joinRoom);

@@ -6,6 +6,15 @@ const URL = `postgres://${PGUSER}:${PGPASSWORD}@${PGHOST}/${PGDATABASE}?options=
 
 const sql = postgres(URL, { ssl: 'require' });
 
+async function getGlobalRoomIdList() {
+    const globalRoomIdList = await sql`
+        SELECT room_id FROM rooms
+        WHERE is_global = TRUE;
+    `
+    return globalRoomIdList.map(item => (item.room_id).toString())
+}
+
+
 async function getRooms(userId) {
     let roomList = await sql`
         SELECT room_list FROM Users
@@ -42,12 +51,12 @@ async function addRoom(userId, roomName) {
         INSERT INTO Rooms 
         (
             room_name,
-            createdDate
+            is_global
         )
         VALUES
         (
             ${roomName},
-            ${new Date()}
+            false
         )
         returning room_id, room_name
     `
@@ -104,28 +113,71 @@ async function insertUser({
     id,
     name,
     avatar_color,
+    has_img,
+    description,
+    img_id = ''
 }) {
+    const globalRoomIdList = await getGlobalRoomIdList();
+    const globalRoomListString = `{${globalRoomIdList.map(id => `${id}`).join(',')}}`;
+
     const user = await sql`
         insert into Users
-        (id, name, avatar_color, room_list, created_date)
+        (id, name, avatar_color, has_img, room_list, description, img_id)
         values
         (
             ${ id },
             ${ name },
             ${ avatar_color },
-            ARRAY ['e8668385-4f5e-4da7-81f6-e5cb886ea0f2'],
-            ${Date.now()}
+            ${ has_img },
+            ${ globalRoomListString },
+            ${ description },
+            ${ img_id }
         )
         returning id, name, avatar_color
-    `
+    `.catch(error => console.error('insertUser Error', error))
     return user
 };
 
+async function updateUser({
+    name,
+    avatar_color,
+    has_img,
+    description,
+    img_id = '', 
+    id
+}) {
+    try {
+        const query = (!has_img || (img_id && has_img)) ? sql`
+            update users
+            set
+                name = ${name},
+                avatar_color = ${avatar_color},
+                has_img = ${has_img},
+                description = ${description},
+                img_id = ${img_id}
+            where id = ${id}
+        ` : sql`
+            update users
+            set
+                name = ${name},
+                avatar_color = ${avatar_color},
+                has_img = ${has_img},
+                description = ${description}
+            where id = ${id}
+        `
+
+        const user = await query;
+    } catch (error) {
+        console.error('updateUser Error', error)
+    }
+}
+
 module.exports = {
     insertUser,
+    updateUser,
     getCurrentUser,
     addRoom,
     joinRoom,
     getRooms,
-    leaveRoom
+    leaveRoom,
 };

@@ -17,7 +17,6 @@ const initialData = {
   messages: {},
   socketId: "",
   lastSeenMsg: {},
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setLastSeenMsg: (obj: any) => {},
 };
 const SocketContext = createContext(initialData);
@@ -34,7 +33,6 @@ export default function SocketProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     socket.connect();
-
     return () => {
       socket.disconnect();
     };
@@ -46,7 +44,10 @@ export default function SocketProvider({ children }: { children: ReactNode }) {
         const newMessages = { ...prev };
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        newMessages[data.roomId] = [...(newMessages[data.roomId] ?? []), data];
+        newMessages[data.room_id] = [
+          ...(newMessages[data.room_id] ?? []),
+          data,
+        ];
         return newMessages;
       });
     }

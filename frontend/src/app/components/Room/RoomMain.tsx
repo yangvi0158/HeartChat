@@ -13,7 +13,6 @@ import roomStyles from "../../styles/room/room.module.sass";
 import { useSocket } from "../../contexts/SocketContext";
 import { useUser } from "../../contexts/UserContext";
 import { useRoom } from "../../contexts/RoomContext";
-import { globalRoomId } from "../../configs/constant";
 
 export default function RoomMain() {
   const [openShareDialog, setOpenShareDialog] = useState(false);
@@ -21,13 +20,14 @@ export default function RoomMain() {
   const { socket } = useSocket();
   const { userData } = useUser();
   const { currentRoom } = useRoom();
-  const { room_id, room_name } = currentRoom[0] || "";
+  const { room_name, is_global } = currentRoom[0] || "";
 
   const handleLeaveRoom = () => {
     socket.emit("leaveRoom", {
       roomId: currentRoom[0]["room_id"],
       userId: userData.id,
       userName: userData.name,
+      room_list: userData.room_list,
     });
     setOpenConfirmDialog(false);
   };
@@ -54,7 +54,7 @@ export default function RoomMain() {
               </button>
             </Tooltip>
           </Box>
-          {room_id !== globalRoomId && (
+          {!is_global && (
             <button
               className={`
                                 ${styles.button}

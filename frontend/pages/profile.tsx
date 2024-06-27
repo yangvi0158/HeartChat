@@ -7,30 +7,22 @@ import FullPageLoading from "@/app/components/FullPageLoading";
 import ProfileEdit from "../src/app/components/Profile/ProfileEdit";
 import { socket } from "@/app/socket";
 import { useUser } from "@/app/contexts/UserContext";
-import "@/app/styles/signup.sass";
+import "@/app/styles/profile.sass";
 
-interface User {
-  name: string;
-  avatar_color: string;
-  has_img: boolean;
-  img_url: string;
-  description: string;
-}
-
-export default function Signup() {
+export default function EditProfile() {
   const { userData, isFetched } = useUser();
   const { data: session } = useSession();
   const { push } = useRouter();
 
   useEffect(() => {
-    if (isFetched && userData.id) push("/room/init");
+    if (!userData.id) push("/");
   }, [userData.id, isFetched]);
 
-  const addUser = (data) => {
+  const updateUser = (data) => {
     const { user } = session || {};
 
     if (user) {
-      socket.emit("addUser", {
+      socket.emit("updateUser", {
         id: user.id,
         ...data,
       });
@@ -40,19 +32,27 @@ export default function Signup() {
 
   return (
     <div>
-      {!isFetched || userData.id ? (
+      {!isFetched ? (
         <FullPageLoading />
       ) : (
         <Stack
           direction="column"
           justifyContent="center"
           alignItems="center"
-          className="signup"
+          className="profile"
         >
           <Stack direction="row" alignItems="center">
-            <p>Create Profile</p>
+            <p>Update Profile</p>
           </Stack>
-          <ProfileEdit onSubmit={addUser} />
+          <ProfileEdit
+            onSubmit={updateUser}
+            originalImgId={userData.img_id || ""}
+            originalData={{
+              name: userData.name,
+              avatar_color: userData.avatar_color,
+              description: userData.description,
+            }}
+          />
         </Stack>
       )}
     </div>

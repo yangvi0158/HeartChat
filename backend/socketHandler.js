@@ -1,13 +1,14 @@
 const psql = require('./psql');
 
 module.exports = (io) => {
-    const getUser = async function (userId) {
+    const getUser = async function (userId, _self) {
         if (!userId) return;
-        const socket = this;
+        const socket = _self ? _self : this;
         try {
             let result = await psql.getCurrentUser(userId);
             socket.emit('getCurrentUser', result);
         } catch (error) {
+            console.error('getUser Error', error)
             socket.emit('showSnackBar', {
                 msg: error.message,
                 status: 'error'
@@ -23,11 +24,25 @@ module.exports = (io) => {
 
             /* update online user amount */
             let roomList = {};
-            const test = io.of("/").adapter.rooms;
-            for (let item of test) {
+            const roomsMap = io.of("/").adapter.rooms;
+            for (let item of roomsMap) {
                 roomList[item[0]] = Array.from(item[1]);
             }
             socket.broadcast.emit('updateOnlineUserAmount', roomList);
+        } catch (error) {
+            socket.emit('showSnackBar', {
+                msg: error.message,
+                status: 'error'
+            })
+        }
+    }
+
+    const updateUser = async function (data) {
+        if (!data) return;
+        const socket = this;
+        try {
+            await psql.updateUser(data)
+            await getUser(data.id, this)
         } catch (error) {
             socket.emit('showSnackBar', {
                 msg: error.message,
@@ -71,13 +86,14 @@ module.exports = (io) => {
                 //everyone received
                 //TODO
                 io.sockets.in(room).emit('receive_message', {
-                    text: `${userName} enters the room, Welcome 👏`,
-                    name: userName,
-                    id: '',
-                    time: new Date(),
-                    socketId: 'wsSystem',
-                    roomId: room,
-                    imageUrl: ''
+                    message_type: 'text',
+                    is_system: true,
+                    img_url: '',
+                    room_id: roomId,
+                    sender_name: '',
+                    sender_id: '',
+                    message: `${userName} enters the room, Welcome 👏`,
+                    create_at: new Date(),
                 })
                 socket.emit('addRoom', roomId);
             }
@@ -100,20 +116,21 @@ module.exports = (io) => {
                 await getRooms(userId, this);
 
                 io.emit('receive_message', {
-                    text: `${userName} enters the room, Welcome 👏`,
-                    name: userName,
-                    id: '',
-                    time: new Date(),
-                    socketId: 'wsSystem',
-                    roomId: roomId,
-                    imageUrl: ''
+                    message_type: 'text',
+                    is_system: true,
+                    img_url: '',
+                    room_id: roomId,
+                    sender_name: '',
+                    sender_id: '',
+                    message: `${userName} enters the room, Welcome 👏`,
+                    create_at: new Date(),
                 })
                 socket.emit('addRoom', roomId);
 
                 /* update online user amount */
                 let roomList = {};
-                const test = io.of("/").adapter.rooms;
-                for (let item of test) {
+                const roomsMap = io.of("/").adapter.rooms;
+                for (let item of roomsMap) {
                     roomList[item[0]] = Array.from(item[1]);
                 }
                 socket.broadcast.emit('updateOnlineUserAmount', roomList);
@@ -134,21 +151,23 @@ module.exports = (io) => {
 
             socket.leave(roomId);
             socket.broadcast.emit('receive_message', {
-                text: `${userName} leave the room`,
-                name: userName,
-                id: '',
-                time: new Date(),
+                message_type: 'text',
+                is_system: true,
+                img_url: '',
+                room_id: roomId,
+                sender_name: '',
+                sender_id: '',
+                message: `${userName} leave the room`,
+                create_at: new Date(),
                 socketId: 'wsSystem',
-                roomId: roomId,
-                imageUrl: ''
             })
 
             await getRooms(userId, this);
 
             /* update online user amount */
             let roomList = {};
-            const test = io.of("/").adapter.rooms;
-            for (let item of test) {
+            const roomsMap = io.of("/").adapter.rooms;
+            for (let item of roomsMap) {
                 roomList[item[0]] = Array.from(item[1]);
             }
             socket.broadcast.emit('updateOnlineUserAmount', roomList);
@@ -170,8 +189,8 @@ module.exports = (io) => {
         let roomList = {};
 
         /* update online user amount */
-        const test = io.of("/").adapter.rooms;
-        for (let item of test) {
+        const roomsMap = io.of("/").adapter.rooms;
+        for (let item of roomsMap) {
             roomList[item[0]] = Array.from(item[1])
         }
 
@@ -184,9 +203,9 @@ module.exports = (io) => {
         let roomList = {};
 
         /* update online user amount */
-        const test = io.of("/").adapter.rooms;
+        const roomsMap = io.of("/").adapter.rooms;
         const socketId = socket.id;
-        for (let item of test) {
+        for (let item of roomsMap) {
             let userAmount = Array.from(item[1]).filter((room) => room !== socketId);
             if (userAmount.length) roomList[item[0]] = userAmount;
         }
@@ -206,6 +225,7 @@ module.exports = (io) => {
     return {
         getUser,
         addUser,
+        updateUser,
         getRooms,
         addRoom,
         joinRoom,

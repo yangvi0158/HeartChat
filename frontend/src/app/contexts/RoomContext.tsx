@@ -10,38 +10,55 @@ import {
 } from "react";
 import { useRouter } from "next/router";
 import { useSocket } from "./SocketContext";
+import { useUser } from "./UserContext";
+import { IRoomArray, IRoomNestedArray } from "../interfaces/IRoom";
 
-const initialData = {
-  rooms: [],
-  currentRoom: [],
-  setRooms: (list: any) => {},
-  setCurrentRoom: (room: []) => {},
-  setIsInit: (isInit: boolean) => {},
+type RoomContextType = {
+  rooms: IRoomNestedArray;
+  currentRoom: IRoomArray;
+  setRooms: React.Dispatch<React.SetStateAction<IRoomNestedArray>>;
+  setCurrentRoom: React.Dispatch<React.SetStateAction<IRoomArray>>;
+  setIsInit: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const RoomContext = createContext(initialData);
+const initialData: RoomContextType = {
+  rooms: [],
+  currentRoom: [],
+  setRooms: () => {},
+  setCurrentRoom: () => {},
+  setIsInit: () => {},
+};
+
+const RoomContext = createContext<RoomContextType>(initialData);
 
 function useRoom() {
   return useContext(RoomContext);
 }
+
 export default function RoomProvider({ children }: { children: ReactNode }) {
   const { socket } = useSocket();
-  const { query, push } = useRouter();
-  const { roomId } = query || "";
-  const [rooms, setRooms] = useState([]);
-  const [currentRoom, setCurrentRoom] = useState([]);
+  const { userData } = useUser();
+  const [rooms, setRooms] = useState<IRoomNestedArray>([]);
+  const [currentRoom, setCurrentRoom] = useState<IRoomArray>([]);
   const [isInit, setIsInit] = useState(false);
+  //console.log("rooms", rooms, currentRoom);
 
   useEffect(() => {
-    if (socket && roomId) {
-      const room = rooms?.find((item) => item[0]["room_id"] === roomId);
-      if (room) {
-        setCurrentRoom(room);
-      } else if (rooms?.length) {
-        push(`/room/${rooms[0][0]["room_id"]}`);
-      }
+    if (!socket) return;
+
+    function onGetRooms(result: IRoomNestedArray) {
+      setRooms(result);
     }
-  }, [roomId, rooms]);
+    socket.on("getRooms", onGetRooms);
+
+    if (userData.id) {
+      socket.emit("getRooms", userData.id);
+    }
+
+    return () => {
+      socket.off("getRooms", onGetRooms);
+    };
+  }, [socket, userData?.id]);
 
   useEffect(() => {
     if (rooms.length && !isInit) {
